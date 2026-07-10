@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout, { useReveal, WHATSAPP } from "../components/Layout";
-import { HeroScene, CarIllustration } from "../components/Brand";
+import { CarIllustration } from "../components/Brand";
 import Marquee from "../components/Marquee";
 import { CategoryOffer, listCategories, formatPrice } from "../api";
 import { todayPlus, daysBetween, FAQS } from "../utils";
@@ -33,16 +33,17 @@ export default function Home() {
 
   return (
     <Layout onHero>
-      {/* HERO */}
-      <header className="hero">
-        <HeroScene />
+      {/* HERO — full-bleed photo */}
+      <header className="hero hero-photo-mode">
+        <div className="hero-photo" />
+        <div className="hero-scrim" />
         <div className="container hero-inner">
           <div className="hero-copy">
             <span className="hero-badge"><IconPin size={15} /> Local rental cars · Willemstad &amp; island-wide</span>
-            <h1>Rent a car in Curaçao, <span className="u">the easy way</span>.</h1>
+            <h1 className="poster hero-poster">Your island,<br />your wheels.</h1>
             <p className="lead">
-              Compare cars from trusted local rental companies in one place. Transparent prices, free
-              cancellation, and you pay at pickup — no prepayment, no surprises.
+              Rent a car from trusted local companies and explore Curaçao at your own pace.
+              Transparent prices, free cancellation, pay at pickup.
             </p>
             <div className="hero-stickers">
               <span className="sticker s-gold tilt-l"><Check /> Pay at pickup</span>

@@ -138,6 +138,30 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .hero-scene { position: absolute; inset: 0; z-index: 0; }
 .hero-scene svg { width: 100%; height: 100%; }
 .hero-inner { position: relative; z-index: 2; padding: 74px 0 130px; }
+
+/* full-bleed photo hero — the photo layers on top of a beachy gradient
+   fallback, so it previews as a gradient until /hero-beach.jpg is added. */
+.hero-photo-mode { min-height: 90vh; display: flex; align-items: center; }
+.hero-photo-mode .hero-inner { padding: 120px 0 150px; width: 100%; }
+.hero-photo {
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url("/hero-beach.jpg"),
+    linear-gradient(135deg, #2a9d8f 0%, #3ec3b6 34%, #cfe6d8 60%, #e9dcc0 100%);
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+.hero-scrim {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(11,58,58,0.62) 0%, rgba(11,58,58,0.12) 26%, rgba(11,58,58,0.10) 58%, rgba(11,58,58,0.66) 100%),
+    linear-gradient(90deg, rgba(11,58,58,0.42) 0%, rgba(11,58,58,0.0) 55%);
+}
+.hero-photo-mode .wave { position: absolute; bottom: -1px; left: 0; z-index: 2; }
+.hero-poster { font-size: clamp(50px, 9vw, 108px); color: #fff; margin: 14px 0 20px; text-shadow: 0 2px 24px rgba(0,0,0,0.28); }
+.hero-photo-mode .lead { text-shadow: 0 1px 12px rgba(0,0,0,0.35); max-width: 500px; }
+.hero-photo-mode .hero-badge { background: rgba(0,0,0,0.28); border-color: rgba(255,255,255,0.4); }
+@media (max-width: 720px) { .hero-photo-mode { min-height: 88vh; } .hero-photo-mode .hero-inner { padding: 100px 0 90px; } }
 .hero-copy { max-width: 660px; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13.5px;
