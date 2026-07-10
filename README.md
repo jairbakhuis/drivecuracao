@@ -1,4 +1,4 @@
-# rent-curaçao (working title)
+# Explore Curaçao Cars — explorecuracaocars.com
 
 White-label consumer car-rental marketplace for Curaçao. Lists car categories
 from all rental companies that opted in on the SuaveCars platform; bookings are

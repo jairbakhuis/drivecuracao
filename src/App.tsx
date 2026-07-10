@@ -102,7 +102,7 @@ export default function App() {
       <header className="site-header">
         <div className="container header-row">
           <span className="wordmark">
-            rent<b>curaçao</b>
+            explore<b>curaçao</b>cars
           </span>
           <span className="header-note">Local rental cars · Pay at pickup</span>
         </div>
@@ -301,7 +301,7 @@ export default function App() {
       <footer className="site-footer">
         <div className="container footer-row">
           <span className="wordmark small">
-            rent<b>curaçao</b>
+            explore<b>curaçao</b>cars
           </span>
           <span>All cars provided by licensed rental companies in Curaçao.</span>
           <span>© {new Date().getFullYear()}</span>
