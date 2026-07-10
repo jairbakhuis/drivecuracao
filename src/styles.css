@@ -4,36 +4,41 @@
    Brand tokens below; swap in one pass if the identity evolves. */
 
 :root {
-  /* greens (the pine of a Curaçao shutter, not a candy teal) */
+  /* deep base green (brand ground) */
   --ink: #0b3a3a;          /* deepest — headings, dark ground */
   --ocean: #0e4642;
   --ocean-2: #12564f;
-  --teal: #1c7d6f;         /* muted jade — primary accent */
-  --teal-soft: #bcded4;
-  /* warm accents — used sparingly */
-  --gold: #e7c15a;         /* aged brass, not neon sun */
-  --coral: #d9694a;        /* terracotta — the ONE warm CTA pop */
-  --coral-2: #e08163;
-  /* neutrals */
-  --sand: #f7f3ea;         /* light ground — warm paper */
-  --sand-2: #efe8d9;
+  --teal: #17847a;         /* jade — primary green accent */
+  --teal-soft: #bfe3da;
+  /* vibrant Caribbean pops — the Handelskade palette, used boldly */
+  --coral: #ef6b45;        /* sunset orange — main CTA pop */
+  --coral-2: #ff8a5b;
+  --pink: #ef8fb0;         /* bougainvillea */
+  --grape: #6b5ca8;        /* dusk purple */
+  --sky: #38b0c9;          /* shallow-water turquoise */
+  --gold: #f2c14e;         /* real sun */
+  /* neutrals — warm cream paper */
+  --sand: #f8f1e2;         /* light ground — warm cream */
+  --sand-2: #f1e7d3;
   --card: #ffffff;
   --text: #3a4a45;
   --muted: #6b7a74;
-  --line: rgba(11, 58, 58, 0.13);
-  --line-soft: rgba(11, 58, 58, 0.07);
+  --line: rgba(11, 58, 58, 0.14);
+  --line-soft: rgba(11, 58, 58, 0.08);
+  --edge: #0b3a3a;         /* bold outline used on cards/badges */
 
-  --radius: 16px;
-  --radius-lg: 22px;
+  --radius: 18px;
+  --radius-lg: 26px;
   --shadow-sm: 0 3px 14px rgba(11, 58, 58, 0.06);
   --shadow: 0 16px 40px rgba(11, 58, 58, 0.10);
   --shadow-lg: 0 28px 70px rgba(11, 58, 58, 0.18);
+  --shadow-pop: 5px 6px 0 var(--edge);   /* hard "sticker" shadow */
 
   --serif: "Fraunces", Georgia, "Times New Roman", serif;
   --display: "Manrope", system-ui, -apple-system, sans-serif;
   --body: "Manrope", system-ui, -apple-system, sans-serif;
 
-  --maxw: 1140px;
+  --maxw: 1180px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,8 +53,11 @@ body {
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
-h1, h2 { font-family: var(--serif); color: var(--ink); line-height: 1.05; letter-spacing: -0.015em; text-wrap: balance; font-weight: 500; font-optical-sizing: auto; }
-h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; font-weight: 700; }
+h1, h2 { font-family: var(--serif); color: var(--ink); line-height: 0.98; letter-spacing: -0.01em; text-wrap: balance; font-weight: 900; font-optical-sizing: auto; }
+h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; font-weight: 800; }
+
+/* Poster headline — big, bold, ALL CAPS, tightly stacked (the Joy-Rush move). */
+.poster { font-family: var(--serif); font-weight: 900; text-transform: uppercase; line-height: 0.92; letter-spacing: 0.005em; font-optical-sizing: auto; text-wrap: balance; }
 
 .container { max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
 .section { padding: 84px 0; }
@@ -64,8 +72,8 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .eyebrow.on-dark { color: var(--gold); }
 .eyebrow::before { content: ""; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
 
-.section-head { max-width: 620px; margin: 0 auto 46px; text-align: center; }
-.section-head h2 { font-size: clamp(28px, 4vw, 42px); margin: 14px 0 12px; }
+.section-head { max-width: 720px; margin: 0 auto 46px; text-align: center; }
+.section-head h2 { font-family: var(--serif); font-weight: 900; text-transform: uppercase; letter-spacing: 0.005em; line-height: 0.94; font-size: clamp(34px, 6vw, 62px); margin: 16px 0 14px; }
 .section-head p { color: var(--muted); font-size: 17.5px; }
 .on-dark .section-head p, .section-head.on-dark p { color: rgba(255,255,255,0.75); }
 
@@ -79,9 +87,10 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 }
 .btn:hover { transform: translateY(-2px); }
 .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
-.btn-coral { background: var(--coral); color: #fff; box-shadow: 0 10px 24px rgba(255, 111, 82, 0.32); }
-.btn-coral:hover { box-shadow: 0 16px 30px rgba(255, 111, 82, 0.4); }
-.btn-teal { background: var(--teal); color: #fff; box-shadow: 0 10px 24px rgba(15, 179, 166, 0.3); }
+.btn-coral { background: var(--coral); color: #fff; border-color: var(--edge); box-shadow: var(--shadow-pop); }
+.btn-coral:hover { transform: translate(-1px, -2px); box-shadow: 7px 9px 0 var(--edge); }
+.btn-teal { background: var(--teal); color: #fff; border-color: var(--edge); box-shadow: var(--shadow-pop); }
+.btn-teal:hover { transform: translate(-1px, -2px); box-shadow: 7px 9px 0 var(--edge); }
 .btn-dark { background: var(--ink); color: #fff; }
 .btn-ghost { background: transparent; border-color: var(--line); color: var(--ink); }
 .btn-ghost-light { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.35); color: #fff; }
@@ -141,6 +150,8 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .hero-ticks { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 26px; font-size: 14.5px; color: rgba(255,255,255,0.85); }
 .hero-ticks span { display: inline-flex; align-items: center; gap: 7px; }
 .hero-ticks svg { color: var(--gold); }
+.hero-stickers { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.hero-stickers svg { color: currentColor; }
 
 /* search card */
 .search-card {
@@ -238,6 +249,13 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .faq details[open] summary::after { content: "–"; }
 .faq details p { color: var(--muted); font-size: 15px; padding: 0 0 18px; }
 
+/* ---------- big color-block CTA ---------- */
+.cta-block { padding: 76px 0; text-align: center; }
+.cta-block .container { display: flex; flex-direction: column; align-items: center; }
+.cta-poster { font-size: clamp(44px, 8vw, 92px); color: #fff; margin-bottom: 16px; }
+.cta-block p { color: rgba(255,255,255,0.92); font-size: 18px; max-width: 520px; margin: 0 auto 28px; }
+.cta-block .btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
 /* ---------- CTA banner ---------- */
 .cta-band { position: relative; overflow: hidden; color: #fff; border-radius: var(--radius-lg); padding: 60px 40px; text-align: center; }
 .cta-band h2 { color: #fff; font-size: clamp(28px, 4vw, 44px); margin-bottom: 14px; }
@@ -294,8 +312,83 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.in { opacity: 1; transform: none; }
 
+/* =====================================================================
+   Playful "island rush" layer — bold caps, marquee, stickers, scallops,
+   vibrant color blocks. Inspired by the energy of drinkjoyrush.com.
+   ===================================================================== */
+
+/* ---------- marquee ticker ---------- */
+.marquee { background: var(--ink); color: var(--sand); overflow: hidden; border-top: 2px solid var(--edge); border-bottom: 2px solid var(--edge); }
+.marquee-track { display: inline-flex; align-items: center; white-space: nowrap; will-change: transform; animation: marquee 32s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee span { display: inline-flex; align-items: center; font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 14px; padding: 13px 0; }
+.marquee .star { margin: 0 22px; color: var(--gold); font-size: 15px; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ---------- sticker pill badge ---------- */
+.sticker {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--display); font-weight: 800; font-size: 12.5px; letter-spacing: 0.02em;
+  padding: 7px 13px; border-radius: 999px; border: 2px solid var(--edge);
+  background: var(--card); color: var(--ink); box-shadow: 3px 3px 0 var(--edge); white-space: nowrap;
+}
+.sticker.s-coral { background: var(--coral); color: #fff; }
+.sticker.s-sky { background: var(--sky); color: #fff; }
+.sticker.s-pink { background: var(--pink); color: var(--ink); }
+.sticker.s-gold { background: var(--gold); color: var(--ink); }
+.sticker.tilt-l { transform: rotate(-4deg); }
+.sticker.tilt-r { transform: rotate(4deg); }
+
+/* ---------- scalloped / cloud image frame ---------- */
+.scallop { position: relative; }
+.scallop img, .scallop svg, .scallop > .scallop-fill {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  /* soft cloud clip via layered radial mask */
+  -webkit-mask: radial-gradient(circle at 50% 12%, #000 24%, transparent 25%) 0 0/50% 50% no-repeat,
+                radial-gradient(circle at 50% 50%, #000 70%, transparent 71%);
+}
+/* simpler robust cloud: use border-radius blobs */
+.blob { border-radius: 46% 54% 52% 48% / 58% 44% 56% 42%; overflow: hidden; }
+.blob-2 { border-radius: 58% 42% 44% 56% / 46% 56% 44% 54%; overflow: hidden; }
+
+/* ---------- vibrant color-block section ---------- */
+.block { border-top: 2px solid var(--edge); border-bottom: 2px solid var(--edge); position: relative; overflow: hidden; }
+.block.b-coral { background: var(--coral); color: #fff; }
+.block.b-sky { background: var(--sky); color: var(--ink); }
+.block.b-pink { background: var(--pink); color: var(--ink); }
+.block.b-cream { background: var(--sand-2); }
+.block h2 { color: inherit; }
+.block.b-coral h2, .block.b-coral p { color: #fff; }
+
+/* bold-outline card system across the marketing cards (Joy-Rush consistency) */
+.step, .benefit, .quote { border: 2px solid var(--edge); box-shadow: 4px 5px 0 var(--edge); }
+.faq details { border: 2px solid var(--edge); box-shadow: 3px 4px 0 var(--edge); }
+.benefit .ic { border: 2px solid var(--edge); border-radius: 12px; }
+.benefit:nth-child(2) .ic { background: #fdeede; }
+.benefit:nth-child(3) .ic { background: #fbe6ec; }
+.benefit:nth-child(4) .ic { background: #e9eef7; }
+.step .num { border: 2px solid var(--edge); color: var(--ink); }
+.step:nth-child(1) .num { background: var(--gold); }
+.step:nth-child(2) .num { background: var(--sky); color: #fff; }
+.step:nth-child(3) .num { background: var(--coral); color: #fff; }
+
+/* pop the category cards (bold outline + sticker shadow + tint) */
+.cat-card { border: 2px solid var(--edge); box-shadow: 4px 5px 0 var(--edge); }
+.cat-card:hover { transform: translate(-2px, -3px); box-shadow: 8px 10px 0 var(--edge); }
+.cat-media { border-bottom: 2px solid var(--edge); }
+.cat-card:nth-child(4n+1) .cat-media { background: #eaf4f1; }
+.cat-card:nth-child(4n+2) .cat-media { background: #fdeede; }
+.cat-card:nth-child(4n+3) .cat-media { background: #fbe6ec; }
+.cat-card:nth-child(4n+4) .cat-media { background: #e9eef7; }
+.cat-tag { background: var(--ink); border: 2px solid var(--edge); }
+
+/* quick-book pill (Joy-Rush "quick add" style) */
+.btn.btn-quick { border: 2px solid var(--edge); background: var(--gold); color: var(--ink); box-shadow: 3px 3px 0 var(--edge); font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; font-size: 13px; padding: 10px 18px; }
+.btn.btn-quick:hover { transform: translate(-1px,-2px); box-shadow: 5px 6px 0 var(--edge); }
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; }
+  .marquee-track { animation: none !important; }
 }

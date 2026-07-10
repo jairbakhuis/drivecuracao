@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout, { useReveal, WHATSAPP } from "../components/Layout";
 import { HeroScene, CarIllustration } from "../components/Brand";
+import Marquee from "../components/Marquee";
 import { CategoryOffer, listCategories, formatPrice } from "../api";
 import { todayPlus, daysBetween, FAQS } from "../utils";
 import { IconPin, IconCalendar, IconShield, IconTag, IconChat, IconGlobe, Stars } from "../components/Icons";
@@ -43,10 +44,10 @@ export default function Home() {
               Compare cars from trusted local rental companies in one place. Transparent prices, free
               cancellation, and you pay at pickup — no prepayment, no surprises.
             </p>
-            <div className="hero-ticks">
-              <span><Check /> Licensed local companies</span>
-              <span><Check /> Pay at pickup</span>
-              <span><Check /> Free cancellation</span>
+            <div className="hero-stickers">
+              <span className="sticker s-gold tilt-l"><Check /> Pay at pickup</span>
+              <span className="sticker tilt-r">Free cancellation</span>
+              <span className="sticker s-sky tilt-l">Local companies</span>
             </div>
           </div>
 
@@ -71,6 +72,9 @@ export default function Home() {
           <path d="M0 40 Q 360 0 720 34 T 1440 30 V70 H0 Z" fill="var(--sand)" />
         </svg>
       </header>
+
+      {/* MARQUEE TICKER */}
+      <Marquee items={["Pay at pickup", "Free cancellation", "Licensed local companies", "No prepayment", "No hidden fees", "EN · NL · Papiamentu", "WhatsApp support"]} />
 
       {/* TRUST BAR */}
       <section className="trustbar">
@@ -142,7 +146,7 @@ export default function Home() {
                         <div className="cat-price">
                           {o.from_price != null ? <><b>{formatPrice(o.from_price, o.currency)}</b><span>per day, from</span></> : <b style={{ fontSize: 16 }}>On request</b>}
                         </div>
-                        <Link className="btn btn-teal" to={`/cars?pickup=${pickupDate}&return=${returnDate}`}>Book</Link>
+                        <Link className="btn btn-quick" to={`/cars?pickup=${pickupDate}&return=${returnDate}`}>Quick book</Link>
                       </div>
                     </div>
                   </article>
@@ -157,7 +161,7 @@ export default function Home() {
                       <p className="cat-desc">{s.desc}</p>
                       <div className="cat-foot">
                         <div className="cat-price"><b>{s.price}</b><span>per day, from</span></div>
-                        <Link className="btn btn-teal" to="/cars">View</Link>
+                        <Link className="btn btn-quick" to="/cars">Quick book</Link>
                       </div>
                     </div>
                   </article>
@@ -228,33 +232,21 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="section-sm">
-          <div className="container">
-            <div className="cta-band reveal" style={{ background: "linear-gradient(120deg, var(--ocean), var(--teal))" }}>
-              <CtaGlow />
-              <div style={{ position: "relative", zIndex: 2 }}>
-                <h2>Ready to explore the island?</h2>
-                <p>Find your rental car in under a minute. Free to search, pay at pickup.</p>
-                <div className="btns">
-                  <button className="btn btn-coral btn-lg" onClick={search}>Search cars</button>
-                  <a className="btn btn-ghost-light btn-lg" href={WHATSAPP} target="_blank" rel="noreferrer">Chat on WhatsApp</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
-    </Layout>
-  );
-}
 
-function CtaGlow() {
-  return (
-    <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <circle cx="120" cy="40" r="160" fill="#ffffff" opacity="0.06" />
-      <circle cx="900" cy="280" r="200" fill="var(--gold)" opacity="0.14" />
-    </svg>
+      {/* BIG COLOR-BLOCK CTA */}
+      <section className="block b-coral cta-block">
+        <div className="container">
+          <span className="sticker s-gold tilt-l" style={{ marginBottom: 20 }}>Free to search</span>
+          <h2 className="poster cta-poster">More island,<br />less hassle.</h2>
+          <p>Find your rental car in under a minute. No account, no prepayment — you pay the local company at pickup.</p>
+          <div className="btns">
+            <button className="btn btn-quick btn-lg" onClick={search}>Search cars</button>
+            <a className="btn btn-dark btn-lg" href={WHATSAPP} target="_blank" rel="noreferrer">Chat on WhatsApp</a>
+          </div>
+        </div>
+      </section>
+    </Layout>
   );
 }
 
