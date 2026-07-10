@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Drive Curaçao</title>
+    <script>
+      // GitHub Pages serves this for any unknown path (deep links / refresh).
+      // Bounce to the app root with the intended path so the SPA router can
+      // render it. Paired with the decoder in src/main.tsx.
+      (function () {
+        var l = window.location;
+        var path = l.pathname + l.search + l.hash;
+        l.replace(l.origin + "/?redirect=" + encodeURIComponent(path));
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
