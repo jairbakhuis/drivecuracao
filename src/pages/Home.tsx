@@ -128,7 +128,7 @@ export default function Home() {
             <div className="cats">
               {popular ? (
                 popular.map((o, i) => (
-                  <article key={`${o.tenant_id}-${o.category_id}`} className="cat-card reveal">
+                  <article key={`${o.tenant_id}-${o.category_name}`} className="cat-card reveal">
                     <div className="cat-media">
                       {o.image_url ? <img src={o.image_url} alt={o.name} loading="lazy" /> : <CarIllustration variant={i} />}
                       <span className="cat-tag">Local partner</span>

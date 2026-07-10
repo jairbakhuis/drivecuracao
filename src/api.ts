@@ -6,19 +6,18 @@ const API_URL =
   "https://lppyxeoskelndowurxay.supabase.co/functions/v1/marketplace-api";
 
 export interface CategoryOffer {
-  category_id: string;
   tenant_id: string;
+  category_name: string;
   name: string;
   description: string | null;
   image_url: string | null;
-  icon: string | null;
   from_price: number | null;
   currency: string;
 }
 
 export interface BookingInput {
   tenant_id: string;
-  category_id: string;
+  category_name: string;
   rental_start_date: string; // ISO
   rental_end_date: string; // ISO
   pickup_location_details?: string;

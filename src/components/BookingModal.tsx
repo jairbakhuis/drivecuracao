@@ -29,7 +29,7 @@ export default function BookingModal({ offer, pickupDate, returnDate, rentalDays
     try {
       const r = await createBooking({
         tenant_id: offer.tenant_id,
-        category_id: offer.category_id,
+        category_name: offer.category_name,
         rental_start_date: `${pickupDate}T10:00:00.000Z`,
         rental_end_date: `${returnDate}T10:00:00.000Z`,
         flight_number: form.flight_number || undefined,
