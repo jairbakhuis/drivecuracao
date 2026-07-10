@@ -44,15 +44,18 @@ export default function Cars() {
     let cancelled = false;
     setLoadError(null);
     setOffers(null);
+    // Always coerce to an array — a malformed/unexpected response must resolve to
+    // "no cars", never crash the render (which would leave the section blank).
+    const asList = (r: { categories?: unknown }) => (Array.isArray(r?.categories) ? (r.categories as CategoryOffer[]) : []);
     (async () => {
       try {
         const r = await listCategories(pickupDate, returnDate);
-        if (!cancelled) setOffers(r.categories);
+        if (!cancelled) setOffers(asList(r));
       } catch {
         // Availability path failed — try the undated listing before giving up.
         try {
           const r = await listCategories();
-          if (!cancelled) setOffers(r.categories);
+          if (!cancelled) setOffers(asList(r));
         } catch {
           if (!cancelled) setLoadError("We couldn't load the cars right now. Please try again in a moment.");
         }
