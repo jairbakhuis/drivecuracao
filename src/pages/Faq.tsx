@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Layout, { useReveal, WHATSAPP } from "../components/Layout";
 import { PageScene } from "../components/Brand";
+import { IconChat } from "../components/Icons";
 import { FAQS } from "../utils";
 
 export default function Faq() {
@@ -25,7 +26,7 @@ export default function Faq() {
           </div>
 
           <div className="confirm reveal" style={{ marginTop: 40 }}>
-            <div className="big">💬</div>
+            <div className="big"><IconChat size={28} /></div>
             <h2 style={{ fontSize: 22 }}>Still have a question?</h2>
             <p>Message us on WhatsApp — we answer in English, Dutch and Papiamentu, usually within minutes.</p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 8 }}>

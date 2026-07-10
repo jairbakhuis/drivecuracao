@@ -31,46 +31,46 @@ export function HeroScene() {
       <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#0a6076" />
-            <stop offset="0.55" stopColor="#0d7f8a" />
-            <stop offset="1" stopColor="#12a99b" />
+            <stop offset="0" stopColor="#0b3a3a" />
+            <stop offset="0.55" stopColor="#12564f" />
+            <stop offset="1" stopColor="#1c7d6f" />
           </linearGradient>
           <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0" stopColor="#ffe08a" />
-            <stop offset="0.5" stopColor="#ffc63f" />
-            <stop offset="1" stopColor="#ffc63f" stopOpacity="0" />
+            <stop offset="0" stopColor="#f0d78f" />
+            <stop offset="0.5" stopColor="#e7c15a" />
+            <stop offset="1" stopColor="#e7c15a" stopOpacity="0" />
           </radialGradient>
           <linearGradient id="sea1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#16bfae" />
-            <stop offset="1" stopColor="#0fb3a6" />
+            <stop offset="0" stopColor="#268a7b" />
+            <stop offset="1" stopColor="#1c7d6f" />
           </linearGradient>
           <linearGradient id="sea2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#0fb3a6" />
-            <stop offset="1" stopColor="#0a8f88" />
+            <stop offset="0" stopColor="#1c7d6f" />
+            <stop offset="1" stopColor="#145a51" />
           </linearGradient>
         </defs>
 
         <rect width="1440" height="620" fill="url(#sky)" />
         {/* sun glow */}
-        <circle cx="1150" cy="150" r="230" fill="url(#sun)" opacity="0.9" />
-        <circle cx="1150" cy="150" r="66" fill="#ffd76b" />
+        <circle cx="1150" cy="150" r="230" fill="url(#sun)" opacity="0.8" />
+        <circle cx="1150" cy="150" r="66" fill="#eccf78" />
 
         {/* soft clouds */}
-        <g fill="#ffffff" opacity="0.16">
+        <g fill="#ffffff" opacity="0.12">
           <ellipse cx="300" cy="120" rx="120" ry="26" />
           <ellipse cx="420" cy="140" rx="90" ry="20" />
           <ellipse cx="900" cy="90" rx="100" ry="22" />
         </g>
 
         {/* distant hills */}
-        <path d="M0 300 Q 250 250 520 296 T 1040 288 T 1440 300 V620 H0 Z" fill="#0b6f78" opacity="0.55" />
-        <path d="M0 340 Q 360 300 720 344 T 1440 336 V620 H0 Z" fill="#0a636f" opacity="0.5" />
+        <path d="M0 300 Q 250 250 520 296 T 1040 288 T 1440 300 V620 H0 Z" fill="#134a44" opacity="0.6" />
+        <path d="M0 340 Q 360 300 720 344 T 1440 336 V620 H0 Z" fill="#103f3a" opacity="0.55" />
 
         {/* sea layers */}
         <path d="M0 380 Q 360 356 720 382 T 1440 378 V620 H0 Z" fill="url(#sea1)" />
         <path d="M0 452 Q 300 430 620 452 T 1200 450 T 1440 452 V620 H0 Z" fill="url(#sea2)" />
         {/* highlights */}
-        <g stroke="#bff3ec" strokeWidth="3" strokeLinecap="round" opacity="0.5" fill="none">
+        <g stroke="#bcded4" strokeWidth="3" strokeLinecap="round" opacity="0.4" fill="none">
           <path d="M120 500 q 40 -10 80 0" />
           <path d="M420 540 q 40 -10 80 0" />
           <path d="M820 512 q 40 -10 80 0" />
@@ -78,7 +78,7 @@ export function HeroScene() {
         </g>
 
         {/* palm silhouettes, left */}
-        <g fill="#063b3a" opacity="0.9">
+        <g fill="#06302f" opacity="0.9">
           <rect x="86" y="300" width="10" height="150" rx="5" transform="rotate(-4 91 375)" />
           <g transform="translate(91 300)">
             <path d="M0 0 C -60 -20 -96 4 -110 30 C -70 14 -34 12 0 8 Z" />
@@ -100,19 +100,19 @@ export function PageScene() {
       <svg viewBox="0 0 1440 360" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="psky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#084a5f" />
-            <stop offset="1" stopColor="#0d8f8c" />
+            <stop offset="0" stopColor="#0b3a3a" />
+            <stop offset="1" stopColor="#1c7d6f" />
           </linearGradient>
           <radialGradient id="psun" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0" stopColor="#ffc63f" />
-            <stop offset="1" stopColor="#ffc63f" stopOpacity="0" />
+            <stop offset="0" stopColor="#e7c15a" />
+            <stop offset="1" stopColor="#e7c15a" stopOpacity="0" />
           </radialGradient>
         </defs>
         <rect width="1440" height="360" fill="url(#psky)" />
-        <circle cx="1180" cy="60" r="200" fill="url(#psun)" opacity="0.8" />
-        <path d="M0 250 Q 360 220 720 252 T 1440 248 V360 H0 Z" fill="#0fb3a6" opacity="0.85" />
-        <path d="M0 300 Q 300 280 620 300 T 1440 298 V360 H0 Z" fill="#0a8f88" />
-        <g stroke="#bff3ec" strokeWidth="3" strokeLinecap="round" opacity="0.4" fill="none">
+        <circle cx="1180" cy="60" r="200" fill="url(#psun)" opacity="0.7" />
+        <path d="M0 250 Q 360 220 720 252 T 1440 248 V360 H0 Z" fill="#1c7d6f" opacity="0.85" />
+        <path d="M0 300 Q 300 280 620 300 T 1440 298 V360 H0 Z" fill="#145a51" />
+        <g stroke="#bcded4" strokeWidth="3" strokeLinecap="round" opacity="0.35" fill="none">
           <path d="M180 320 q 40 -10 80 0" /><path d="M620 330 q 40 -10 80 0" /><path d="M1020 322 q 40 -10 80 0" />
         </g>
       </svg>
@@ -122,18 +122,18 @@ export function PageScene() {
 
 /** Illustrated category thumbnail when a tenant supplied no image. */
 export function CarIllustration({ variant = 0 }: { variant?: number }) {
-  const bodies = ["#0fb3a6", "#ff8a5b", "#ffc63f", "#0a6076", "#ff6f52"];
+  const bodies = ["#1c7d6f", "#d9694a", "#e7c15a", "#12564f", "#e08163"];
   const body = bodies[variant % bodies.length];
   return (
     <svg className="cat-illus" viewBox="0 0 320 168" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <linearGradient id={`cg${variant}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#eaf6f4" />
-          <stop offset="1" stopColor="#d7ede9" />
+          <stop offset="0" stopColor="#eef3ef" />
+          <stop offset="1" stopColor="#dfe9e2" />
         </linearGradient>
       </defs>
       <rect width="320" height="168" fill={`url(#cg${variant})`} />
-      <ellipse cx="160" cy="150" rx="130" ry="14" fill="#0a6076" opacity="0.08" />
+      <ellipse cx="160" cy="150" rx="130" ry="14" fill="#0b3a3a" opacity="0.08" />
       <g transform="translate(58 52)">
         <path d="M8 52 L28 20 Q34 10 48 10 L128 10 Q142 10 152 20 L184 42 L196 44 Q206 46 206 58 L206 70 Q206 78 198 78 L14 78 Q4 78 4 68 L4 62 Q4 54 8 52 Z" fill={body} />
         <path d="M40 24 Q46 16 56 16 L96 16 L96 40 L34 40 Z" fill="#ffffff" opacity="0.85" />

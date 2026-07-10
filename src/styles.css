@@ -1,34 +1,36 @@
 /* Drive Curaçao — drivecuracao.com
-   "Sunny Caribbean editorial": ocean + turquoise base, warm sun-gold & coral accents.
+   Editorial island look: deep pine-green ground, warm sand paper, a single
+   restrained gold accent. Fraunces (serif) for display, Manrope for UI/body.
    Brand tokens below; swap in one pass if the identity evolves. */
 
 :root {
-  /* ocean / water */
-  --ink: #06303f;          /* deepest — headings, dark ground */
-  --ocean: #084a5f;
-  --ocean-2: #0a6076;
-  --teal: #0fb3a6;         /* turquoise water — primary accent */
-  --teal-soft: #7fe0d6;
-  /* warm caribbean */
-  --gold: #ffc63f;         /* sun */
-  --coral: #ff6f52;        /* sunset — CTA pop */
-  --coral-2: #ff8a5b;
+  /* greens (the pine of a Curaçao shutter, not a candy teal) */
+  --ink: #0b3a3a;          /* deepest — headings, dark ground */
+  --ocean: #0e4642;
+  --ocean-2: #12564f;
+  --teal: #1c7d6f;         /* muted jade — primary accent */
+  --teal-soft: #bcded4;
+  /* warm accents — used sparingly */
+  --gold: #e7c15a;         /* aged brass, not neon sun */
+  --coral: #d9694a;        /* terracotta — the ONE warm CTA pop */
+  --coral-2: #e08163;
   /* neutrals */
-  --sand: #fdf7ec;         /* light ground */
-  --sand-2: #f7eede;
+  --sand: #f7f3ea;         /* light ground — warm paper */
+  --sand-2: #efe8d9;
   --card: #ffffff;
-  --text: #204049;
-  --muted: #5e7b83;
-  --line: rgba(6, 48, 63, 0.12);
-  --line-soft: rgba(6, 48, 63, 0.07);
+  --text: #3a4a45;
+  --muted: #6b7a74;
+  --line: rgba(11, 58, 58, 0.13);
+  --line-soft: rgba(11, 58, 58, 0.07);
 
-  --radius: 20px;
-  --radius-lg: 28px;
-  --shadow-sm: 0 4px 16px rgba(6, 48, 63, 0.07);
-  --shadow: 0 18px 44px rgba(6, 48, 63, 0.12);
-  --shadow-lg: 0 30px 80px rgba(6, 48, 63, 0.22);
+  --radius: 16px;
+  --radius-lg: 22px;
+  --shadow-sm: 0 3px 14px rgba(11, 58, 58, 0.06);
+  --shadow: 0 16px 40px rgba(11, 58, 58, 0.10);
+  --shadow-lg: 0 28px 70px rgba(11, 58, 58, 0.18);
 
-  --display: "Bricolage Grotesque", system-ui, sans-serif;
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --display: "Manrope", system-ui, -apple-system, sans-serif;
   --body: "Manrope", system-ui, -apple-system, sans-serif;
 
   --maxw: 1140px;
@@ -46,7 +48,8 @@ body {
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
-h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; font-weight: 700; }
+h1, h2 { font-family: var(--serif); color: var(--ink); line-height: 1.05; letter-spacing: -0.015em; text-wrap: balance; font-weight: 500; font-optical-sizing: auto; }
+h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; font-weight: 700; }
 
 .container { max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
 .section { padding: 84px 0; }
@@ -171,9 +174,7 @@ h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
 @media (max-width: 780px) { .steps { grid-template-columns: 1fr; } }
 .step { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 30px 26px; position: relative; box-shadow: var(--shadow-sm); }
-.step .num { font-family: var(--display); font-weight: 800; font-size: 15px; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--teal); color: #fff; margin-bottom: 18px; }
-.step:nth-child(2) .num { background: var(--gold); color: var(--ink); }
-.step:nth-child(3) .num { background: var(--coral); }
+.step .num { font-family: var(--serif); font-weight: 500; font-size: 22px; width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: transparent; color: var(--teal); border: 1.5px solid var(--line); margin-bottom: 18px; }
 .step h3 { font-size: 20px; margin-bottom: 8px; }
 .step p { color: var(--muted); font-size: 15px; }
 
@@ -181,10 +182,7 @@ h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.
 .why { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 @media (max-width: 760px) { .why { grid-template-columns: 1fr; } }
 .benefit { display: flex; gap: 16px; background: var(--card); border-radius: var(--radius); padding: 24px; border: 1px solid var(--line-soft); box-shadow: var(--shadow-sm); }
-.benefit .ic { flex: none; width: 46px; height: 46px; border-radius: 13px; display: flex; align-items: center; justify-content: center; background: rgba(15,179,166,0.12); color: var(--teal); }
-.benefit:nth-child(2) .ic { background: rgba(255,198,63,0.18); color: #d99a00; }
-.benefit:nth-child(3) .ic { background: rgba(255,111,82,0.14); color: var(--coral); }
-.benefit:nth-child(4) .ic { background: rgba(10,96,118,0.12); color: var(--ocean-2); }
+.benefit .ic { flex: none; width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(28,125,111,0.09); color: var(--teal); }
 .benefit h3 { font-size: 18px; margin-bottom: 5px; }
 .benefit p { color: var(--muted); font-size: 14.5px; }
 
@@ -248,8 +246,8 @@ h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.
 
 /* ---------- confirmation / booking modal ---------- */
 .confirm { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 40px; max-width: 640px; margin: 0 auto; box-shadow: var(--shadow); text-align: center; }
-.confirm .big { font-size: 46px; }
-.confirm h2 { font-size: 26px; margin: 8px 0 12px; }
+.confirm .big { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: rgba(28,125,111,0.1); color: var(--teal); }
+.confirm h2 { font-size: 28px; margin: 14px 0 12px; }
 .confirm p { color: var(--muted); margin-bottom: 12px; }
 .confirm .total { color: var(--ink) !important; font-size: 17px; }
 

@@ -4,6 +4,7 @@ import Layout, { useReveal, WHATSAPP } from "../components/Layout";
 import { HeroScene, CarIllustration } from "../components/Brand";
 import { CategoryOffer, listCategories, formatPrice } from "../api";
 import { todayPlus, daysBetween, FAQS } from "../utils";
+import { IconPin, IconCalendar, IconShield, IconTag, IconChat, IconGlobe, Stars } from "../components/Icons";
 
 const Check = () => (
   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
@@ -36,7 +37,7 @@ export default function Home() {
         <HeroScene />
         <div className="container hero-inner">
           <div className="hero-copy">
-            <span className="hero-badge">🌴 Local rental cars · Willemstad &amp; island-wide</span>
+            <span className="hero-badge"><IconPin size={15} /> Local rental cars · Willemstad &amp; island-wide</span>
             <h1>Rent a car in Curaçao, <span className="u">the easy way</span>.</h1>
             <p className="lead">
               Compare cars from trusted local rental companies in one place. Transparent prices, free
@@ -52,18 +53,18 @@ export default function Home() {
           <div className="search-card">
             <div className="search-grid">
               <div className="field">
-                <label>📅 Pick-up date</label>
+                <label><IconCalendar size={14} /> Pick-up date</label>
                 <input type="date" value={pickupDate} min={todayPlus(0)} onChange={(e) => setPickupDate(e.target.value)} />
               </div>
               <div className="field">
-                <label>📅 Return date</label>
+                <label><IconCalendar size={14} /> Return date</label>
                 <input type="date" value={returnDate} min={pickupDate} onChange={(e) => setReturnDate(e.target.value)} />
               </div>
               <button className="btn btn-coral btn-lg" onClick={search} disabled={!datesValid}>
                 Search cars
               </button>
             </div>
-            <p className="search-note">🔒 Free to search · {rentalDays} day{rentalDays !== 1 ? "s" : ""} selected · you only pay the rental company at pickup</p>
+            <p className="search-note"><IconShield size={14} /> Free to search · {rentalDays} day{rentalDays !== 1 ? "s" : ""} selected · you only pay the rental company at pickup</p>
           </div>
         </div>
         <svg className="wave" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true">
@@ -109,10 +110,10 @@ export default function Home() {
               <h2>Everything a visitor actually wants</h2>
             </div>
             <div className="why">
-              <div className="benefit reveal"><div className="ic">🏝️</div><div><h3>One island, one place</h3><p>Compare cars from many local companies side by side instead of calling around.</p></div></div>
-              <div className="benefit reveal"><div className="ic">💳</div><div><h3>No prepayment</h3><p>Pay the rental company at pickup on their normal terms. We never charge your card.</p></div></div>
-              <div className="benefit reveal"><div className="ic">🔎</div><div><h3>Honest prices</h3><p>Clear per-day pricing with no hidden booking fees added on top.</p></div></div>
-              <div className="benefit reveal"><div className="ic">💬</div><div><h3>Real local help</h3><p>Message us on WhatsApp in English, Dutch or Papiamentu and get a fast, human answer.</p></div></div>
+              <div className="benefit reveal"><div className="ic"><IconGlobe /></div><div><h3>One island, one place</h3><p>Compare cars from many local companies side by side instead of calling around.</p></div></div>
+              <div className="benefit reveal"><div className="ic"><IconTag /></div><div><h3>No prepayment</h3><p>Pay the rental company at pickup on their normal terms. We never charge your card.</p></div></div>
+              <div className="benefit reveal"><div className="ic"><IconShield /></div><div><h3>Honest prices</h3><p>Clear per-day pricing with no hidden booking fees added on top.</p></div></div>
+              <div className="benefit reveal"><div className="ic"><IconChat /></div><div><h3>Real local help</h3><p>Message us on WhatsApp in English, Dutch or Papiamentu and get a fast, human answer.</p></div></div>
             </div>
           </div>
         </section>
@@ -202,9 +203,9 @@ export default function Home() {
               <h2>What travelers say</h2>
             </div>
             <div className="quotes">
-              <div className="quote reveal"><div className="stars">★★★★★</div><p>"Booked in two minutes, picked up the car right at the airport, paid on the spot. So much easier than emailing five companies."</p><div className="who"><span className="av">L</span><div><b>Lisa M.</b><span>Netherlands · Compact</span></div></div></div>
-              <div className="quote reveal"><div className="stars">★★★★★</div><p>"Loved that there was no prepayment. The local company was friendly and the price was exactly what the site showed."</p><div className="who"><span className="av">D</span><div><b>Daniel R.</b><span>USA · SUV</span></div></div></div>
-              <div className="quote reveal"><div className="stars">★★★★★</div><p>"WhatsApp answered in Papiamentu within minutes and sorted an automatic for us. Highly recommend for the island."</p><div className="who"><span className="av">S</span><div><b>Shanice B.</b><span>Curaçao · Automatic</span></div></div></div>
+              <div className="quote reveal"><div className="stars"><Stars /></div><p>"Booked in two minutes, picked up the car right at the airport, paid on the spot. So much easier than emailing five companies."</p><div className="who"><span className="av">L</span><div><b>Lisa M.</b><span>Netherlands · Compact</span></div></div></div>
+              <div className="quote reveal"><div className="stars"><Stars /></div><p>"Loved that there was no prepayment. The local company was friendly and the price was exactly what the site showed."</p><div className="who"><span className="av">D</span><div><b>Daniel R.</b><span>USA · SUV</span></div></div></div>
+              <div className="quote reveal"><div className="stars"><Stars /></div><p>"WhatsApp answered in Papiamentu within minutes and sorted an automatic for us. Highly recommend for the island."</p><div className="who"><span className="av">S</span><div><b>Shanice B.</b><span>Curaçao · Automatic</span></div></div></div>
             </div>
           </div>
         </section>

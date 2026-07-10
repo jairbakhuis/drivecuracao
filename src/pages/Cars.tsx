@@ -6,6 +6,7 @@ import CategoryCard from "../components/CategoryCard";
 import BookingModal from "../components/BookingModal";
 import { CategoryOffer, BookingResult, listCategories, formatPrice } from "../api";
 import { todayPlus, daysBetween } from "../utils";
+import { IconCalendar, IconCheck } from "../components/Icons";
 
 /** Add days to a YYYY-MM-DD string. */
 function addDays(date: string, n: number): string {
@@ -34,15 +35,29 @@ export default function Cars() {
   };
 
   // Re-fetch availability whenever the dates change (date-aware listing).
+  // Robust: always resolve to a concrete state (cards / empty / error). If the
+  // date-aware availability call fails, fall back to the plain listing so a
+  // transient backend hiccup never leaves the page blank.
   useEffect(() => {
     if (!datesValid) return;
     setParams({ pickup: pickupDate, return: returnDate }, { replace: true });
     let cancelled = false;
     setLoadError(null);
     setOffers(null);
-    listCategories(pickupDate, returnDate)
-      .then((r) => { if (!cancelled) setOffers(r.categories); })
-      .catch(() => { if (!cancelled) setLoadError("We couldn't load the cars right now. Please try again in a moment."); });
+    (async () => {
+      try {
+        const r = await listCategories(pickupDate, returnDate);
+        if (!cancelled) setOffers(r.categories);
+      } catch {
+        // Availability path failed — try the undated listing before giving up.
+        try {
+          const r = await listCategories();
+          if (!cancelled) setOffers(r.categories);
+        } catch {
+          if (!cancelled) setLoadError("We couldn't load the cars right now. Please try again in a moment.");
+        }
+      }
+    })();
     return () => { cancelled = true; };
   }, [pickupDate, returnDate, datesValid]);
 
@@ -58,11 +73,11 @@ export default function Cars() {
           <div className="search-card" style={{ marginTop: 28 }}>
             <div className="search-grid">
               <div className="field">
-                <label>📅 Pick-up date</label>
+                <label><IconCalendar size={14} /> Pick-up date</label>
                 <input type="date" value={pickupDate} min={todayPlus(0)} onChange={(e) => changePickup(e.target.value)} />
               </div>
               <div className="field">
-                <label>📅 Return date</label>
+                <label><IconCalendar size={14} /> Return date</label>
                 <input type="date" value={returnDate} min={addDays(pickupDate, 1)} onChange={(e) => setReturnDate(e.target.value)} />
               </div>
               <div className="field" style={{ justifyContent: "flex-end" }}>
@@ -79,8 +94,8 @@ export default function Cars() {
         <div className="container">
           {confirmation ? (
             <div className="confirm">
-              <div className="big">🎉</div>
-              <h2>{confirmation.confirmed ? "Your car is booked!" : "Request received!"}</h2>
+              <div className="big"><IconCheck size={30} /></div>
+              <h2>{confirmation.confirmed ? "Your car is booked" : "Request received"}</h2>
               {confirmation.confirmed ? (
                 <p>
                   Booking <strong>{confirmation.reservation_number}</strong> is <strong>confirmed</strong>. The rental

@@ -103,7 +103,7 @@ function Footer() {
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Drive Curaçao. All cars provided by licensed local rental companies.</span>
-          <span>Made in Curaçao 🌴</span>
+          <span>Made in Curaçao</span>
         </div>
       </div>
     </footer>
