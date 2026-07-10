@@ -30,6 +30,7 @@ export interface BookingInput {
     phone: string;
     date_of_birth: string; // YYYY-MM-DD
     driver_license_number?: string;
+    driver_license_expiry?: string; // YYYY-MM-DD
     country?: string;
     communication_preference?: "email" | "whatsapp" | "both";
   };
@@ -43,6 +44,7 @@ export interface BookingResult {
   daily_rate: number;
   rental_days: number;
   payment: string;
+  confirmed?: boolean;
 }
 
 async function call<T>(body: Record<string, unknown>): Promise<T> {
@@ -58,8 +60,11 @@ async function call<T>(body: Record<string, unknown>): Promise<T> {
   return data as T;
 }
 
-export function listCategories(): Promise<{ categories: CategoryOffer[] }> {
-  return call({ action: "list_categories" });
+export function listCategories(pickupDate?: string, returnDate?: string): Promise<{ categories: CategoryOffer[] }> {
+  return call({
+    action: "list_categories",
+    ...(pickupDate && returnDate ? { pickup_date: pickupDate, return_date: returnDate } : {}),
+  });
 }
 
 export function createBooking(input: BookingInput): Promise<BookingResult> {

@@ -12,7 +12,9 @@ interface Props {
 
 const empty = {
   first_name: "", last_name: "", email: "", phone: "",
-  date_of_birth: "", driver_license_number: "", flight_number: "", notes: "",
+  date_of_birth: "", country: "",
+  driver_license_number: "", driver_license_expiry: "",
+  flight_number: "", notes: "",
 };
 
 export default function BookingModal({ offer, pickupDate, returnDate, rentalDays, onClose, onBooked }: Props) {
@@ -37,7 +39,9 @@ export default function BookingModal({ offer, pickupDate, returnDate, rentalDays
         customer: {
           first_name: form.first_name, last_name: form.last_name,
           email: form.email, phone: form.phone, date_of_birth: form.date_of_birth,
+          country: form.country || undefined,
           driver_license_number: form.driver_license_number || undefined,
+          driver_license_expiry: form.driver_license_expiry || undefined,
           communication_preference: "email",
         },
       });
@@ -63,6 +67,7 @@ export default function BookingModal({ offer, pickupDate, returnDate, rentalDays
           )}
         </p>
         <form className="form" onSubmit={submit}>
+          <p className="form-section">Your details</p>
           <div className="form-row">
             <label>First name<input required value={form.first_name} onChange={set("first_name")} autoComplete="given-name" /></label>
             <label>Last name<input required value={form.last_name} onChange={set("last_name")} autoComplete="family-name" /></label>
@@ -73,19 +78,28 @@ export default function BookingModal({ offer, pickupDate, returnDate, rentalDays
           </div>
           <div className="form-row">
             <label>Date of birth<input required type="date" value={form.date_of_birth} onChange={set("date_of_birth")} /></label>
-            <label>Driver's license no.<input value={form.driver_license_number} onChange={set("driver_license_number")} placeholder="Optional" /></label>
+            <label>Country / nationality<input required value={form.country} onChange={set("country")} placeholder="e.g. Netherlands" autoComplete="country-name" /></label>
           </div>
+
+          <p className="form-section">Driver's license</p>
           <div className="form-row">
-            <label>Flight number<input value={form.flight_number} onChange={set("flight_number")} placeholder="Optional" /></label>
-            <label>Notes<input value={form.notes} onChange={set("notes")} placeholder="Optional" /></label>
+            <label>License number<input required value={form.driver_license_number} onChange={set("driver_license_number")} /></label>
+            <label>License expiry<input required type="date" value={form.driver_license_expiry} onChange={set("driver_license_expiry")} /></label>
           </div>
+
+          <p className="form-section">Trip details <span className="opt">(optional)</span></p>
+          <div className="form-row">
+            <label>Flight number<input value={form.flight_number} onChange={set("flight_number")} placeholder="e.g. KL0735" /></label>
+            <label>Anything we should know?<input value={form.notes} onChange={set("notes")} placeholder="Hotel, child seat, etc." /></label>
+          </div>
+
           {error && <p className="form-error">{error}</p>}
           <button className="btn btn-coral btn-block" disabled={submitting}>
-            {submitting ? "Sending request…" : "Request this car — pay at pickup"}
+            {submitting ? "Sending…" : "Book now — pay at pickup"}
           </button>
           <p className="form-fine">
-            No payment now. The rental company confirms availability and emails you the full details.
-            Free cancellation before pickup.
+            No payment now. Free cancellation before pickup. Your details go straight to the local rental
+            company, who confirms and meets you at pickup.
           </p>
         </form>
       </div>
