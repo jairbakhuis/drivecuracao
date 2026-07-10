@@ -10,7 +10,7 @@ export default function CategoryCard({
   disabled?: boolean;
 }) {
   return (
-    <article className="cat-card reveal">
+    <article className="cat-card">
       <div className="cat-media">
         {offer.image_url ? (
           <img src={offer.image_url} alt={offer.name} loading="lazy" />

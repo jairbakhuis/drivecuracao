@@ -129,7 +129,7 @@ export default function Home() {
             <div className="cats">
               {popular ? (
                 popular.map((o, i) => (
-                  <article key={`${o.tenant_id}-${o.category_name}`} className="cat-card reveal">
+                  <article key={`${o.tenant_id}-${o.category_name}`} className="cat-card">
                     <div className="cat-media">
                       {o.image_url ? <img src={o.image_url} alt={o.name} loading="lazy" /> : <CarIllustration variant={i} />}
                       <span className="cat-tag">Local partner</span>
@@ -149,7 +149,7 @@ export default function Home() {
                 ))
               ) : (
                 SAMPLE.map((s, i) => (
-                  <article key={s.name} className="cat-card reveal">
+                  <article key={s.name} className="cat-card">
                     <div className="cat-media"><CarIllustration variant={i} /><span className="cat-tag">Coming soon</span></div>
                     <div className="cat-body">
                       <h3>{s.name}</h3>
