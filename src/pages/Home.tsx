@@ -178,8 +178,8 @@ export default function Home() {
         {/* LOCAL SPLIT */}
         <section className="section" style={{ background: "var(--sand-2)" }}>
           <div className="container split">
-            <div className="split-media reveal" aria-hidden="true">
-              <LocalIllustration />
+            <div className="split-media reveal">
+              <img src="/images/local-panel.jpg" alt="A calm turquoise Curaçao beach" loading="lazy" />
             </div>
             <div className="reveal">
               <span className="eyebrow">Proudly local</span>
@@ -251,31 +251,3 @@ export default function Home() {
   );
 }
 
-function LocalIllustration() {
-  return (
-    <svg viewBox="0 0 560 420" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%" }} aria-hidden="true">
-      <defs>
-        <linearGradient id="lsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#0a6076" /><stop offset="1" stopColor="#12a99b" /></linearGradient>
-      </defs>
-      <rect width="560" height="420" fill="url(#lsky)" />
-      <circle cx="440" cy="90" r="52" fill="var(--gold)" />
-      {/* Handelskade-style colorful houses */}
-      <g>
-        {["#ff8a5b", "#ffc63f", "#0fb3a6", "#ff6f52", "#7fe0d6", "#ffb020"].map((c, i) => (
-          <g key={i} transform={`translate(${40 + i * 82} 190)`}>
-            <rect width="70" height="120" fill={c} />
-            <path d="M0 0 L35 -26 L70 0 Z" fill="#06303f" opacity="0.85" />
-            <rect x="12" y="24" width="16" height="22" fill="#ffffff" opacity="0.8" />
-            <rect x="42" y="24" width="16" height="22" fill="#ffffff" opacity="0.8" />
-            <rect x="26" y="70" width="18" height="50" fill="#06303f" opacity="0.7" />
-          </g>
-        ))}
-      </g>
-      {/* waterline */}
-      <rect y="310" width="560" height="110" fill="#0d8f8c" />
-      <g stroke="#bff3ec" strokeWidth="3" strokeLinecap="round" opacity="0.5" fill="none">
-        <path d="M60 350 q 30 -8 60 0" /><path d="M260 372 q 30 -8 60 0" /><path d="M420 352 q 30 -8 60 0" />
-      </g>
-    </svg>
-  );
-}
