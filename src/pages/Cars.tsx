@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Layout, { useReveal } from "../components/Layout";
-import { PageScene } from "../components/Brand";
 import CategoryCard from "../components/CategoryCard";
 import BookingModal from "../components/BookingModal";
 import { CategoryOffer, BookingResult, listCategories, formatPrice } from "../api";
@@ -66,8 +65,7 @@ export default function Cars() {
 
   return (
     <Layout>
-      <header className="page-hero">
-        <PageScene />
+      <header className="page-hero" style={{ "--hero-img": "url(/images/hero-cars.jpg)" } as React.CSSProperties}>
         <div className="container" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow on-dark">Browse cars</span>
           <h1>Find your car in Curaçao</h1>

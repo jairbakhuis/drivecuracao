@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import Layout, { useReveal, WHATSAPP } from "../components/Layout";
-import { PageScene } from "../components/Brand";
 import { IconChat } from "../components/Icons";
 import { FAQS } from "../utils";
 
@@ -8,8 +7,7 @@ export default function Faq() {
   const reveal = useReveal();
   return (
     <Layout>
-      <header className="page-hero">
-        <PageScene />
+      <header className="page-hero" style={{ "--hero-img": "url(/images/hero-faq.jpg)" } as React.CSSProperties}>
         <div className="container" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow on-dark">FAQ</span>
           <h1>Questions? We've got answers</h1>

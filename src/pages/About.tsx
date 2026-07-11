@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
 import Layout, { useReveal, WHATSAPP } from "../components/Layout";
-import { PageScene } from "../components/Brand";
 
 export default function About() {
   const reveal = useReveal();
   return (
     <Layout>
-      <header className="page-hero">
-        <PageScene />
+      <header className="page-hero" style={{ "--hero-img": "url(/images/hero-about.jpg)" } as React.CSSProperties}>
         <div className="container" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow on-dark">About us</span>
           <h1>The friendliest way to rent a car in Curaçao</h1>

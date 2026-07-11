@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import Layout, { useReveal } from "../components/Layout";
-import { PageScene } from "../components/Brand";
 
 const STEPS = [
   { n: 1, t: "Search your dates", d: "Enter your pick-up and return dates. We instantly show the car categories available from local rental companies across Curaçao — with clear per-day prices." },
@@ -13,8 +12,7 @@ export default function HowItWorks() {
   const reveal = useReveal();
   return (
     <Layout>
-      <header className="page-hero">
-        <PageScene />
+      <header className="page-hero" style={{ "--hero-img": "url(/images/hero-how.jpg)" } as React.CSSProperties}>
         <div className="container" style={{ position: "relative", zIndex: 2 }}>
           <span className="eyebrow on-dark">How it works</span>
           <h1>From search to sunshine in four steps</h1>
