@@ -142,6 +142,18 @@ export function createBooking(input: BookingInput): Promise<BookingResult> {
   return call({ action: "create_booking", ...input });
 }
 
+export interface ReviewInput {
+  reservation_id: string;
+  rating: number; // 1–5
+  comment?: string;
+  reviewer_name?: string;
+  reviewer_country?: string;
+}
+
+export function submitReview(input: ReviewInput): Promise<{ ok: boolean; review_id: string }> {
+  return call({ action: "submit_review", ...input });
+}
+
 export function formatPrice(amount: number, currency: string): string {
   const symbol = currency === "XCG" || currency === "ANG" ? "ƒ" : currency === "EUR" ? "€" : "$";
   return `${symbol}${amount.toFixed(2)}`;
