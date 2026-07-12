@@ -183,7 +183,6 @@ export default function Cars() {
                       title={g.title}
                       disabled={!datesValid}
                       displayCurrency={displayCurrency}
-                      rentalDays={rentalDays}
                       insurance={cardIns}
                       rating={ratingFor(g.best, partners)}
                       onBook={(o) => setSelected({ offer: o })}
