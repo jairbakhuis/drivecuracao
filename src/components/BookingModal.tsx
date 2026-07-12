@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { CategoryOffer, BookingResult, PartnerReqs, createBooking, formatPrice } from "../api";
+import { CategoryOffer, BookingResult, PartnerReqs, NotableExtra, DisplayCurrency, createBooking, displayPrice } from "../api";
 
 interface Props {
   offer: CategoryOffer;
   /** Booking rules for the matched partner (drives required fields). */
   reqs?: PartnerReqs;
+  /** Pre-tick this add-on (e.g. arrived via the "with insurance" trigger). */
+  preselectExtraId?: string;
+  displayCurrency: DisplayCurrency;
   pickupDate: string;
   returnDate: string;
   pickupTime: string;
@@ -12,6 +15,12 @@ interface Props {
   rentalDays: number;
   onClose: () => void;
   onBooked: (r: BookingResult) => void;
+}
+
+/** Price of an add-on for the whole rental (flat fee, or daily × days). */
+function extraPrice(e: NotableExtra, days: number): number {
+  if (e.flat_fee && e.flat_fee > 0) return e.flat_fee;
+  return (e.daily_rate || 0) * days;
 }
 
 // White-label pickup/drop-off choices. We never show a partner's branded
@@ -45,10 +54,22 @@ function locString(place: string, detail: string): string {
   return needsDetail(place) && detail.trim() ? `${place}: ${detail.trim()}` : place;
 }
 
-export default function BookingModal({ offer, reqs, pickupDate, returnDate, pickupTime, returnTime, rentalDays, onClose, onBooked }: Props) {
+export default function BookingModal({ offer, reqs, preselectExtraId, displayCurrency, pickupDate, returnDate, pickupTime, returnTime, rentalDays, onClose, onBooked }: Props) {
   const [form, setForm] = useState(empty);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const extras = reqs?.notable_extras ?? [];
+  const [chosenExtras, setChosenExtras] = useState<string[]>(
+    preselectExtraId && extras.some((e) => e.id === preselectExtraId) ? [preselectExtraId] : []
+  );
+  const toggleExtra = (id: string) =>
+    setChosenExtras((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
+
+  const money = (amount: number) => displayPrice(amount, offer.currency, displayCurrency);
+  const base = (offer.from_price ?? 0) * rentalDays;
+  const extrasTotal = extras.filter((e) => chosenExtras.includes(e.id)).reduce((s, e) => s + extraPrice(e, rentalDays), 0);
+  const estTotal = base + extrasTotal;
 
   // Defaults are deliberately strict when we don't have the partner's rules yet
   // (license expected), so we never under-collect. The server enforces the rest.
@@ -56,7 +77,6 @@ export default function BookingModal({ offer, reqs, pickupDate, returnDate, pick
   const flightRequired = reqs?.flight_required ?? false;
   const minAge = reqs?.min_age ?? null;
   const minDays = reqs?.min_days ?? null;
-  const currency = reqs?.currency || offer.currency;
 
   const setText = (k: keyof typeof empty) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -107,6 +127,7 @@ export default function BookingModal({ offer, reqs, pickupDate, returnDate, pick
         return_location_details: dropoffLoc,
         flight_number: form.flight_number || undefined,
         notes: form.notes || undefined,
+        extras: chosenExtras.length ? chosenExtras : undefined,
         customer: {
           first_name: form.first_name, last_name: form.last_name,
           email: form.email, phone: form.phone, date_of_birth: form.date_of_birth,
@@ -134,11 +155,11 @@ export default function BookingModal({ offer, reqs, pickupDate, returnDate, pick
         <p className="modal-sub">
           {pickupDate} {pickupTime} → {returnDate} {returnTime} · {rentalDays} day{rentalDays !== 1 ? "s" : ""}
           {offer.from_price != null && (
-            <> · est. <b>{formatPrice(offer.from_price * rentalDays, currency)}</b> total · pay at pickup</>
+            <> · est. <b>{money(estTotal)}</b> total · pay at pickup</>
           )}
         </p>
         {reqs?.deposit_enabled && reqs.deposit_amount ? (
-          <p className="modal-note">A refundable deposit of {formatPrice(reqs.deposit_amount, currency)} is held at pickup.</p>
+          <p className="modal-note">A refundable deposit of {money(reqs.deposit_amount)} is held at pickup.</p>
         ) : null}
 
         <form className="form" onSubmit={submit}>
@@ -168,6 +189,26 @@ export default function BookingModal({ offer, reqs, pickupDate, returnDate, pick
                 <label>Hotel name / address<input value={form.dropoff_detail} onChange={setText("dropoff_detail")} placeholder="e.g. Marriott, Piscadera" /></label>
               ) : <span />}
             </div>
+          )}
+
+          {extras.length > 0 && (
+            <>
+              <p className="form-section">Add-ons <span className="opt">(optional)</span></p>
+              <div className="addons">
+                {extras.map((e) => {
+                  const perDay = !(e.flat_fee && e.flat_fee > 0);
+                  return (
+                    <label key={e.id} className="addon">
+                      <input type="checkbox" checked={chosenExtras.includes(e.id)} onChange={() => toggleExtra(e.id)} />
+                      <span className="addon-name">{e.name}</span>
+                      <span className="addon-price">
+                        +{money(extraPrice(e, rentalDays))}{perDay ? <span className="addon-rate"> · {money(e.daily_rate || 0)}/day</span> : null}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </>
           )}
 
           <p className="form-section">Your details</p>

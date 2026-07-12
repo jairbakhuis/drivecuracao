@@ -3,7 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import Layout, { useReveal } from "../components/Layout";
 import CategoryCard from "../components/CategoryCard";
 import BookingModal from "../components/BookingModal";
-import { CategoryOffer, BookingResult, PartnerReqs, listCategories, groupOffers, formatPrice } from "../api";
+import {
+  CategoryOffer, BookingResult, PartnerReqs, DisplayCurrency, DISPLAY_CURRENCIES,
+  listCategories, groupOffers, insuranceOption, formatPrice,
+} from "../api";
 import { todayPlus, daysBetween } from "../utils";
 import { IconCalendar, IconCheck } from "../components/Icons";
 
@@ -22,8 +25,19 @@ export default function Cars() {
   const [returnTime, setReturnTime] = useState(params.get("returnTime") || "10:00");
   const [offers, setOffers] = useState<CategoryOffer[] | null>(null);
   const [partners, setPartners] = useState<Record<string, PartnerReqs>>({});
+  const [displayCurrency, setDisplayCurrency] = useState<DisplayCurrency>(() => {
+    try {
+      const v = localStorage.getItem("dc") as DisplayCurrency | null;
+      if (v && (DISPLAY_CURRENCIES as readonly string[]).includes(v)) return v;
+    } catch { /* ignore */ }
+    return "USD";
+  });
+  const changeCurrency = (c: DisplayCurrency) => {
+    setDisplayCurrency(c);
+    try { localStorage.setItem("dc", c); } catch { /* ignore */ }
+  };
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [selected, setSelected] = useState<CategoryOffer | null>(null);
+  const [selected, setSelected] = useState<{ offer: CategoryOffer; preselectExtraId?: string } | null>(null);
   const [confirmation, setConfirmation] = useState<BookingResult | null>(null);
   const reveal = useReveal();
 
@@ -132,9 +146,16 @@ export default function Cars() {
             </div>
           ) : (
             <>
-              <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 10, marginBottom: 24 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10, marginBottom: 24 }}>
                 <h2 style={{ fontSize: 26 }}>Available cars</h2>
-                <span style={{ color: "var(--muted)", fontSize: 14.5 }}>Prices per day · pay at pickup</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div className="cur-switch" role="group" aria-label="Display currency">
+                    {DISPLAY_CURRENCIES.map((c) => (
+                      <button key={c} className={c === displayCurrency ? "on" : ""} onClick={() => changeCurrency(c)}>{c}</button>
+                    ))}
+                  </div>
+                  <span style={{ color: "var(--muted)", fontSize: 14.5 }}>per day · pay at pickup</span>
+                </div>
               </div>
 
               {loadError && <p className="state-msg card">{loadError}</p>}
@@ -147,15 +168,27 @@ export default function Cars() {
               )}
 
               <div className="cats">
-                {groups.map((g) => (
-                  <CategoryCard
-                    key={g.key}
-                    offer={g.best}
-                    title={g.title}
-                    disabled={!datesValid}
-                    onBook={setSelected}
-                  />
-                ))}
+                {groups.map((g) => {
+                  const ins = insuranceOption(g, partners);
+                  const cardIns = ins ? {
+                    sameAsBest: ins.offer.tenant_id === g.best.tenant_id,
+                    priceFrom: ins.offer.from_price ?? 0,
+                    currency: ins.offer.currency,
+                    onBook: () => setSelected({ offer: ins.offer, preselectExtraId: ins.extra.id }),
+                  } : undefined;
+                  return (
+                    <CategoryCard
+                      key={g.key}
+                      offer={g.best}
+                      title={g.title}
+                      disabled={!datesValid}
+                      displayCurrency={displayCurrency}
+                      rentalDays={rentalDays}
+                      insurance={cardIns}
+                      onBook={(o) => setSelected({ offer: o })}
+                    />
+                  );
+                })}
               </div>
             </>
           )}
@@ -164,8 +197,10 @@ export default function Cars() {
 
       {selected && (
         <BookingModal
-          offer={selected}
-          reqs={partners[selected.tenant_id]}
+          offer={selected.offer}
+          reqs={partners[selected.offer.tenant_id]}
+          preselectExtraId={selected.preselectExtraId}
+          displayCurrency={displayCurrency}
           pickupDate={pickupDate}
           returnDate={returnDate}
           pickupTime={pickupTime}

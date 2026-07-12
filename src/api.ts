@@ -7,6 +7,14 @@ import { categoryBucketExact, bucketLabel } from "./categoryImage";
 const API_URL =
   "https://lppyxeoskelndowurxay.supabase.co/functions/v1/marketplace-api";
 
+export interface Specs {
+  seats: number | null;
+  luggage: number | null;
+  transmission: string | null;
+  fuel: string | null;
+  aircon: boolean;
+}
+
 export interface CategoryOffer {
   tenant_id: string;
   category_name: string;
@@ -15,6 +23,14 @@ export interface CategoryOffer {
   image_url: string | null;
   from_price: number | null;
   currency: string;
+  specs?: Specs;
+}
+
+export interface NotableExtra {
+  id: string;
+  name: string;
+  daily_rate: number | null;
+  flat_fee: number | null;
 }
 
 /**
@@ -31,6 +47,7 @@ export interface PartnerReqs {
   downpayment_enabled: boolean;
   downpayment_amount: number | null;
   currency: string;
+  notable_extras?: NotableExtra[];
 }
 
 export interface BookingInput {
@@ -42,6 +59,7 @@ export interface BookingInput {
   return_location_details?: string;
   flight_number?: string;
   notes?: string;
+  extras?: string[];
   customer: {
     first_name: string;
     last_name: string;
@@ -103,8 +121,53 @@ export function createBooking(input: BookingInput): Promise<BookingResult> {
 }
 
 export function formatPrice(amount: number, currency: string): string {
-  const symbol = currency === "XCG" ? "ƒ" : currency === "EUR" ? "€" : "$";
+  const symbol = currency === "XCG" || currency === "ANG" ? "ƒ" : currency === "EUR" ? "€" : "$";
   return `${symbol}${amount.toFixed(2)}`;
+}
+
+// ---------------------------------------------------------------------------
+// Display-currency conversion. Rental companies price in their own currency and
+// you always pay THEM in it at pickup — so this is a shopper convenience only,
+// to compare classes in one currency. USD is the default. USD↔ANG is a fixed
+// peg (guilder); EUR floats, so it's an estimate. Keep these easy to refresh.
+
+export const DISPLAY_CURRENCIES = ["USD", "EUR", "ANG"] as const;
+export type DisplayCurrency = (typeof DISPLAY_CURRENCIES)[number];
+
+// Rates expressed as "1 USD = N <code>".
+const USD_RATES: Record<string, number> = { USD: 1, ANG: 1.79, XCG: 1.79, EUR: 0.92 };
+
+export function convertPrice(amount: number, from: string, to: string): number {
+  const f = USD_RATES[from] ?? 1;
+  const t = USD_RATES[to] ?? 1;
+  return (amount / f) * t;
+}
+
+/** Convert then format into the shopper's chosen display currency. */
+export function displayPrice(amount: number, from: string, to: DisplayCurrency): string {
+  return formatPrice(convertPrice(amount, from, to), to);
+}
+
+/**
+ * The cheapest offer in a class whose partner offers a notable extra (insurance
+ * / protection). Returns null when no partner in the class offers one. Used to
+ * surface a peace-of-mind option without revealing which company provides it.
+ */
+export interface InsuranceOption { offer: CategoryOffer; extra: NotableExtra }
+
+export function insuranceOption(
+  group: CategoryGroup,
+  partners: Record<string, PartnerReqs>
+): InsuranceOption | null {
+  let best: InsuranceOption | null = null;
+  for (const o of group.alternatives) {
+    const extra = partners[o.tenant_id]?.notable_extras?.[0];
+    if (!extra) continue;
+    if (!best || (o.from_price ?? Infinity) < (best.offer.from_price ?? Infinity)) {
+      best = { offer: o, extra };
+    }
+  }
+  return best;
 }
 
 // ---------------------------------------------------------------------------

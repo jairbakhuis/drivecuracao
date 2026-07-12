@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Layout, { useReveal, WHATSAPP } from "../components/Layout";
 import { CarIllustration } from "../components/Brand";
 import CategoryImage from "../components/CategoryImage";
+import { SpecsRow } from "../components/CategoryCard";
 import Marquee from "../components/Marquee";
-import { CategoryOffer, listCategories, groupOffers, formatPrice } from "../api";
+import { CategoryOffer, DisplayCurrency, DISPLAY_CURRENCIES, listCategories, groupOffers, displayPrice } from "../api";
 import { todayPlus, daysBetween, FAQS } from "../utils";
 import { IconPin, IconCalendar, IconShield, IconTag, IconChat, IconGlobe, Stars } from "../components/Icons";
 
@@ -26,6 +27,14 @@ export default function Home() {
   const [pickupTime, setPickupTime] = useState("10:00");
   const [returnTime, setReturnTime] = useState("10:00");
   const [offers, setOffers] = useState<CategoryOffer[] | null>(null);
+  // Display currency the shopper last chose on the Cars page (USD by default).
+  const dc: DisplayCurrency = (() => {
+    try {
+      const v = localStorage.getItem("dc") as DisplayCurrency | null;
+      if (v && (DISPLAY_CURRENCIES as readonly string[]).includes(v)) return v;
+    } catch { /* ignore */ }
+    return "USD";
+  })();
   const rentalDays = daysBetween(pickupDate, returnDate);
   const datesValid = pickupDate < returnDate;
 
@@ -156,10 +165,11 @@ export default function Home() {
                     <div className="cat-body">
                       <h3>{g.title}</h3>
                       <p className="cat-similar">or similar — assigned at confirmation</p>
+                      <SpecsRow specs={o.specs} />
                       {o.description && <p className="cat-desc">{o.description}</p>}
                       <div className="cat-foot">
                         <div className="cat-price">
-                          {o.from_price != null ? <><b>{formatPrice(o.from_price, o.currency)}</b><span>per day, from</span></> : <b style={{ fontSize: 16 }}>On request</b>}
+                          {o.from_price != null ? <><b>{displayPrice(o.from_price, o.currency, dc)}</b><span>per day, from</span></> : <b style={{ fontSize: 16 }}>On request</b>}
                         </div>
                         <Link className="btn btn-quick" to={`/cars?pickup=${pickupDate}&return=${returnDate}`}>Quick book</Link>
                       </div>

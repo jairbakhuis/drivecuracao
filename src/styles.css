@@ -235,8 +235,19 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .cat-tag { position: absolute; top: 12px; left: 12px; background: rgba(6,48,63,0.85); color: #fff; font-size: 11.5px; font-weight: 700; padding: 5px 11px; border-radius: 999px; backdrop-filter: blur(4px); }
 .cat-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
 .cat-body h3 { font-size: 19px; }
-.cat-similar { font-size: 12.5px; color: var(--muted); margin: 3px 0 12px; }
+.cat-similar { font-size: 12.5px; color: var(--muted); margin: 3px 0 10px; }
 .cat-desc { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+.cat-specs { display: flex; flex-wrap: wrap; gap: 7px 14px; margin: 2px 0 12px; }
+.cat-specs .spec { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.cat-specs .spec svg { color: var(--teal); }
+.cat-ins-chip { display: inline-flex; align-items: center; font-size: 12px; font-weight: 700; color: #0f6d4e; background: #e6f4ee; border: 1px solid #bfe3d3; padding: 4px 9px; border-radius: 999px; margin-bottom: 12px; align-self: flex-start; }
+.cat-ins-upsell { display: inline-flex; align-items: center; text-align: left; font-size: 12.5px; font-weight: 700; color: #0f6d4e; background: #eef7f2; border: 1.5px solid #bfe3d3; padding: 8px 11px; border-radius: 10px; margin-bottom: 12px; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+.cat-ins-upsell:hover:not(:disabled) { background: #e0f1e9; border-color: #9ed4bd; }
+.cat-ins-upsell:disabled { opacity: 0.55; cursor: default; }
+.cur-switch { display: inline-flex; border: 1.5px solid var(--line); border-radius: 999px; overflow: hidden; background: #fff; }
+.cur-switch button { border: none; background: transparent; padding: 6px 13px; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; font-family: inherit; }
+.cur-switch button.on { background: var(--teal); color: #fff; }
+.cur-switch button:not(.on):hover { background: #eef6f3; color: var(--ink); }
 .cat-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .cat-price b { font-family: var(--display); font-size: 22px; color: var(--ink); }
 .cat-price span { display: block; font-size: 11.5px; color: var(--muted); }
@@ -312,6 +323,13 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .form-error { color: #c02c1c; font-size: 14px; background: #fdecea; padding: 10px 12px; border-radius: 10px; }
 .form-fine { font-size: 12px; color: var(--muted); text-align: center; }
 .modal-note { font-size: 13px; color: var(--ink); background: #eef6f3; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; margin: -8px 0 4px; }
+.addons { display: flex; flex-direction: column; gap: 8px; }
+.form label.addon { flex-direction: row; align-items: center; gap: 10px; border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 13px; cursor: pointer; font-weight: 600; }
+.addon:has(input:checked) { border-color: var(--teal); background: #eef7f2; }
+.addon input { width: 17px; height: 17px; accent-color: var(--teal); flex-shrink: 0; }
+.addon-name { flex: 1; font-size: 14.5px; color: var(--ink); }
+.addon-price { font-weight: 800; font-size: 14px; color: var(--ink); white-space: nowrap; }
+.addon-rate { font-weight: 500; font-size: 12px; color: var(--muted); }
 .form-section { font-family: var(--display); font-weight: 600; font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin-top: 4px; }
 .form-section .opt { color: var(--muted); font-weight: 500; text-transform: none; letter-spacing: 0; }
 
