@@ -1,5 +1,5 @@
 import { CategoryOffer, formatPrice } from "../api";
-import { CarIllustration } from "./Brand";
+import CategoryImage from "./CategoryImage";
 
 export default function CategoryCard({
   offer, index, onBook, disabled,
@@ -12,11 +12,7 @@ export default function CategoryCard({
   return (
     <article className="cat-card">
       <div className="cat-media">
-        {offer.image_url ? (
-          <img src={offer.image_url} alt={offer.name} loading="lazy" />
-        ) : (
-          <CarIllustration variant={index} />
-        )}
+        <CategoryImage name={offer.category_name || offer.name} tenantImage={offer.image_url} index={index} alt={offer.name} />
         <span className="cat-tag">Local partner</span>
       </div>
       <div className="cat-body">

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout, { useReveal, WHATSAPP } from "../components/Layout";
 import { CarIllustration } from "../components/Brand";
+import CategoryImage from "../components/CategoryImage";
 import Marquee from "../components/Marquee";
 import { CategoryOffer, listCategories, formatPrice } from "../api";
 import { todayPlus, daysBetween, FAQS } from "../utils";
@@ -136,7 +137,7 @@ export default function Home() {
                 popular.map((o, i) => (
                   <article key={`${o.tenant_id}-${o.category_name}`} className="cat-card">
                     <div className="cat-media">
-                      {o.image_url ? <img src={o.image_url} alt={o.name} loading="lazy" /> : <CarIllustration variant={i} />}
+                      <CategoryImage name={o.category_name || o.name} tenantImage={o.image_url} index={i} alt={o.name} />
                       <span className="cat-tag">Local partner</span>
                     </div>
                     <div className="cat-body">
