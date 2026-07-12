@@ -133,11 +133,10 @@ export default function Cars() {
               )}
 
               <div className="cats">
-                {(offers || []).map((offer, i) => (
+                {(offers || []).map((offer) => (
                   <CategoryCard
                     key={`${offer.tenant_id}-${offer.category_name}`}
                     offer={offer}
-                    index={i}
                     disabled={!datesValid}
                     onBook={setSelected}
                   />

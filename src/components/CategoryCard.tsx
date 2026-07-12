@@ -2,17 +2,16 @@ import { CategoryOffer, formatPrice } from "../api";
 import CategoryImage from "./CategoryImage";
 
 export default function CategoryCard({
-  offer, index, onBook, disabled,
+  offer, onBook, disabled,
 }: {
   offer: CategoryOffer;
-  index: number;
   onBook: (o: CategoryOffer) => void;
   disabled?: boolean;
 }) {
   return (
     <article className="cat-card">
       <div className="cat-media">
-        <CategoryImage name={offer.category_name || offer.name} tenantImage={offer.image_url} index={index} alt={offer.name} />
+        <CategoryImage name={offer.category_name || offer.name} alt={offer.name} />
         <span className="cat-tag">Local partner</span>
       </div>
       <div className="cat-body">
