@@ -23,13 +23,15 @@ export default function Home() {
   const reveal = useReveal();
   const [pickupDate, setPickupDate] = useState(todayPlus(3));
   const [returnDate, setReturnDate] = useState(todayPlus(8));
+  const [pickupTime, setPickupTime] = useState("10:00");
+  const [returnTime, setReturnTime] = useState("10:00");
   const [offers, setOffers] = useState<CategoryOffer[] | null>(null);
   const rentalDays = daysBetween(pickupDate, returnDate);
   const datesValid = pickupDate < returnDate;
 
   useEffect(() => { listCategories().then((r) => setOffers(r.categories)).catch(() => setOffers([])); }, []);
 
-  const search = () => nav(`/cars?pickup=${pickupDate}&return=${returnDate}`);
+  const search = () => nav(`/cars?pickup=${pickupDate}&return=${returnDate}&pickupTime=${pickupTime}&returnTime=${returnTime}`);
   // One card per car class (cheapest partner) — same collapse as the Cars page.
   const popular = (offers && offers.length > 0 ? groupOffers(offers).slice(0, 6) : null);
 
@@ -61,8 +63,16 @@ export default function Home() {
                 <input type="date" value={pickupDate} min={todayPlus(0)} onChange={(e) => setPickupDate(e.target.value)} />
               </div>
               <div className="field">
+                <label>Time</label>
+                <input type="time" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} />
+              </div>
+              <div className="field">
                 <label><IconCalendar size={14} /> Return date</label>
                 <input type="date" value={returnDate} min={pickupDate} onChange={(e) => setReturnDate(e.target.value)} />
+              </div>
+              <div className="field">
+                <label>Time</label>
+                <input type="time" value={returnTime} onChange={(e) => setReturnTime(e.target.value)} />
               </div>
               <button className="btn btn-coral btn-lg" onClick={search} disabled={!datesValid}>
                 Search cars

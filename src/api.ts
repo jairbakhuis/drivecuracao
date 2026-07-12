@@ -17,12 +17,29 @@ export interface CategoryOffer {
   currency: string;
 }
 
+/**
+ * Booking rules for a partner, mirrored from their own site so the storefront
+ * asks for exactly what they'd ask for. No identifying data — white-label safe.
+ */
+export interface PartnerReqs {
+  min_age: number | null;
+  license_required: boolean;
+  flight_required: boolean;
+  min_days: number | null;
+  deposit_enabled: boolean;
+  deposit_amount: number | null;
+  downpayment_enabled: boolean;
+  downpayment_amount: number | null;
+  currency: string;
+}
+
 export interface BookingInput {
   tenant_id: string;
   category_name: string;
   rental_start_date: string; // ISO
   rental_end_date: string; // ISO
   pickup_location_details?: string;
+  return_location_details?: string;
   flight_number?: string;
   notes?: string;
   customer: {
@@ -71,7 +88,10 @@ async function call<T>(body: Record<string, unknown>): Promise<T> {
   return data as T;
 }
 
-export function listCategories(pickupDate?: string, returnDate?: string): Promise<{ categories: CategoryOffer[] }> {
+export function listCategories(
+  pickupDate?: string,
+  returnDate?: string
+): Promise<{ categories: CategoryOffer[]; partners?: Record<string, PartnerReqs> }> {
   return call({
     action: "list_categories",
     ...(pickupDate && returnDate ? { pickup_date: pickupDate, return_date: returnDate } : {}),

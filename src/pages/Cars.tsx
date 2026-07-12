@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Layout, { useReveal } from "../components/Layout";
 import CategoryCard from "../components/CategoryCard";
 import BookingModal from "../components/BookingModal";
-import { CategoryOffer, BookingResult, listCategories, groupOffers, formatPrice } from "../api";
+import { CategoryOffer, BookingResult, PartnerReqs, listCategories, groupOffers, formatPrice } from "../api";
 import { todayPlus, daysBetween } from "../utils";
 import { IconCalendar, IconCheck } from "../components/Icons";
 
@@ -18,7 +18,10 @@ export default function Cars() {
   const [params, setParams] = useSearchParams();
   const [pickupDate, setPickupDate] = useState(params.get("pickup") || todayPlus(3));
   const [returnDate, setReturnDate] = useState(params.get("return") || todayPlus(8));
+  const [pickupTime, setPickupTime] = useState(params.get("pickupTime") || "10:00");
+  const [returnTime, setReturnTime] = useState(params.get("returnTime") || "10:00");
   const [offers, setOffers] = useState<CategoryOffer[] | null>(null);
+  const [partners, setPartners] = useState<Record<string, PartnerReqs>>({});
   const [loadError, setLoadError] = useState<string | null>(null);
   const [selected, setSelected] = useState<CategoryOffer | null>(null);
   const [confirmation, setConfirmation] = useState<BookingResult | null>(null);
@@ -42,7 +45,7 @@ export default function Cars() {
   // transient backend hiccup never leaves the page blank.
   useEffect(() => {
     if (!datesValid) return;
-    setParams({ pickup: pickupDate, return: returnDate }, { replace: true });
+    setParams({ pickup: pickupDate, return: returnDate, pickupTime, returnTime }, { replace: true });
     let cancelled = false;
     setLoadError(null);
     setOffers(null);
@@ -52,7 +55,7 @@ export default function Cars() {
     (async () => {
       try {
         const r = await listCategories(pickupDate, returnDate);
-        if (!cancelled) setOffers(asList(r));
+        if (!cancelled) { setOffers(asList(r)); setPartners(r.partners || {}); }
       } catch {
         // Availability path failed — try the undated listing before giving up.
         try {
@@ -81,8 +84,16 @@ export default function Cars() {
                 <input type="date" value={pickupDate} min={todayPlus(0)} onChange={(e) => changePickup(e.target.value)} />
               </div>
               <div className="field">
+                <label>Pick-up time</label>
+                <input type="time" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} />
+              </div>
+              <div className="field">
                 <label><IconCalendar size={14} /> Return date</label>
                 <input type="date" value={returnDate} min={addDays(pickupDate, 1)} onChange={(e) => setReturnDate(e.target.value)} />
+              </div>
+              <div className="field">
+                <label>Return time</label>
+                <input type="time" value={returnTime} onChange={(e) => setReturnTime(e.target.value)} />
               </div>
               <div className="field" style={{ justifyContent: "flex-end" }}>
                 <div className="btn btn-dark" style={{ pointerEvents: "none" }}>
@@ -154,8 +165,11 @@ export default function Cars() {
       {selected && (
         <BookingModal
           offer={selected}
+          reqs={partners[selected.tenant_id]}
           pickupDate={pickupDate}
           returnDate={returnDate}
+          pickupTime={pickupTime}
+          returnTime={returnTime}
           rentalDays={rentalDays}
           onClose={() => setSelected(null)}
           onBooked={(r) => { setConfirmation(r); setSelected(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
