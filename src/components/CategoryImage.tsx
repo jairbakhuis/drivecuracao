@@ -3,14 +3,19 @@ import CategoryIllustration from "./CategoryIllustration";
 import { categoryBucket } from "../categoryImage";
 
 /**
- * Category thumbnail. Prefers a dropped-in illustration for the category bucket
- * (public/categories/<bucket>.png or .jpg — transparent PNG looks best), and
- * falls back to the built-in vector only until those are uploaded. Shows a TYPE
- * of car, never a specific vehicle, so no tenant car photo is used.
+ * Class thumbnail. Prefers the real partner car photo the marketplace API sends
+ * for this class (`src` — a representative "or similar" vehicle), then a
+ * dropped-in category illustration (public/categories/<bucket>.png|.jpg), and
+ * only falls back to the built-in vector when neither exists. Represents a TYPE
+ * of car ("or similar"), never a promise of one specific vehicle.
  */
-export default function CategoryImage({ name, alt }: { name: string; alt?: string }) {
+export default function CategoryImage({ src, name, alt }: { src?: string | null; name: string; alt?: string }) {
   const bucket = categoryBucket(name);
-  const candidates = [`/categories/${bucket}.png`, `/categories/${bucket}.jpg`];
+  const candidates = [
+    ...(src ? [src] : []),
+    `/categories/${bucket}.png`,
+    `/categories/${bucket}.jpg`,
+  ];
   const [i, setI] = useState(0);
   if (i >= candidates.length) return <CategoryIllustration name={name} />;
   return (

@@ -70,7 +70,7 @@ export default function CategoryCard({
   return (
     <article className="cat-card">
       <div className="cat-media">
-        <CategoryImage name={offer.category_name || offer.name} alt={title || offer.name} />
+        <CategoryImage src={offer.image_url} name={offer.category_name || offer.name} alt={title || offer.name} />
         <span className="cat-tag">Local partner</span>
       </div>
       <div className="cat-body">

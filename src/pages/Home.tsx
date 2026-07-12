@@ -164,7 +164,7 @@ export default function Home() {
                   return (
                   <article key={g.key} className="cat-card">
                     <div className="cat-media">
-                      <CategoryImage name={o.category_name || o.name} alt={g.title} />
+                      <CategoryImage src={o.image_url} name={o.category_name || o.name} alt={g.title} />
                       <span className="cat-tag">Local partner</span>
                     </div>
                     <div className="cat-body">
