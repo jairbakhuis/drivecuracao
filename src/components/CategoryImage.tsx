@@ -19,7 +19,7 @@ export default function CategoryImage({ name, alt }: { name: string; alt?: strin
       alt={alt || name}
       loading="lazy"
       onError={() => setI((n) => n + 1)}
-      style={{ width: "100%", height: "100%", objectFit: "contain", padding: "8px" }}
+      style={{ width: "100%", height: "100%", objectFit: "contain", padding: "4px" }}
     />
   );
 }

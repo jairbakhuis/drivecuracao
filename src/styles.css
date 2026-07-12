@@ -413,11 +413,10 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 /* pop the category cards (bold outline + sticker shadow + tint) */
 .cat-card { border: 2px solid var(--edge); box-shadow: 4px 5px 0 var(--edge); }
 .cat-card:hover { transform: translate(-2px, -3px); box-shadow: 8px 10px 0 var(--edge); }
-.cat-media { border-bottom: 2px solid var(--edge); }
-.cat-card:nth-child(4n+1) .cat-media { background: #eaf4f1; }
-.cat-card:nth-child(4n+2) .cat-media { background: #fdeede; }
-.cat-card:nth-child(4n+3) .cat-media { background: #fbe6ec; }
-.cat-card:nth-child(4n+4) .cat-media { background: #e9eef7; }
+/* White media area so the white-background category illustrations blend in
+   seamlessly. The vector fallbacks paint their own background, so they're
+   unaffected by this. */
+.cat-media { border-bottom: 2px solid var(--edge); background: #fff; }
 .cat-tag { background: var(--ink); border: 2px solid var(--edge); }
 
 /* quick-book pill (Joy-Rush "quick add" style) */
