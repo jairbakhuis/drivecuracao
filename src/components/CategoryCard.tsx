@@ -2,20 +2,22 @@ import { CategoryOffer, formatPrice } from "../api";
 import CategoryImage from "./CategoryImage";
 
 export default function CategoryCard({
-  offer, onBook, disabled,
+  offer, onBook, disabled, title,
 }: {
   offer: CategoryOffer;
   onBook: (o: CategoryOffer) => void;
   disabled?: boolean;
+  /** Clean class label ("Compact", "SUV"). Falls back to the offer name. */
+  title?: string;
 }) {
   return (
     <article className="cat-card">
       <div className="cat-media">
-        <CategoryImage name={offer.category_name || offer.name} alt={offer.name} />
+        <CategoryImage name={offer.category_name || offer.name} alt={title || offer.name} />
         <span className="cat-tag">Local partner</span>
       </div>
       <div className="cat-body">
-        <h3>{offer.name}</h3>
+        <h3>{title || offer.name}</h3>
         <p className="cat-similar">or similar — assigned at confirmation</p>
         {offer.description && <p className="cat-desc">{offer.description}</p>}
         <div className="cat-foot">

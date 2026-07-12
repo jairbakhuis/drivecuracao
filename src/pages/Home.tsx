@@ -4,7 +4,7 @@ import Layout, { useReveal, WHATSAPP } from "../components/Layout";
 import { CarIllustration } from "../components/Brand";
 import CategoryImage from "../components/CategoryImage";
 import Marquee from "../components/Marquee";
-import { CategoryOffer, listCategories, formatPrice } from "../api";
+import { CategoryOffer, listCategories, groupOffers, formatPrice } from "../api";
 import { todayPlus, daysBetween, FAQS } from "../utils";
 import { IconPin, IconCalendar, IconShield, IconTag, IconChat, IconGlobe, Stars } from "../components/Icons";
 
@@ -30,7 +30,8 @@ export default function Home() {
   useEffect(() => { listCategories().then((r) => setOffers(r.categories)).catch(() => setOffers([])); }, []);
 
   const search = () => nav(`/cars?pickup=${pickupDate}&return=${returnDate}`);
-  const popular = (offers && offers.length > 0 ? offers.slice(0, 6) : null);
+  // One card per car class (cheapest partner) — same collapse as the Cars page.
+  const popular = (offers && offers.length > 0 ? groupOffers(offers).slice(0, 6) : null);
 
   return (
     <Layout onHero>
@@ -134,14 +135,16 @@ export default function Home() {
             </div>
             <div className="cats">
               {popular ? (
-                popular.map((o) => (
-                  <article key={`${o.tenant_id}-${o.category_name}`} className="cat-card">
+                popular.map((g) => {
+                  const o = g.best;
+                  return (
+                  <article key={g.key} className="cat-card">
                     <div className="cat-media">
-                      <CategoryImage name={o.category_name || o.name} alt={o.name} />
+                      <CategoryImage name={o.category_name || o.name} alt={g.title} />
                       <span className="cat-tag">Local partner</span>
                     </div>
                     <div className="cat-body">
-                      <h3>{o.name}</h3>
+                      <h3>{g.title}</h3>
                       <p className="cat-similar">or similar — assigned at confirmation</p>
                       {o.description && <p className="cat-desc">{o.description}</p>}
                       <div className="cat-foot">
@@ -152,7 +155,8 @@ export default function Home() {
                       </div>
                     </div>
                   </article>
-                ))
+                  );
+                })
               ) : (
                 SAMPLE.map((s, i) => (
                   <article key={s.name} className="cat-card">

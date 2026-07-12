@@ -2,6 +2,8 @@
 // The storefront is white-label: tenant_id is an opaque routing key and is
 // never shown to the customer.
 
+import { categoryBucketExact, bucketLabel } from "./categoryImage";
+
 const API_URL =
   "https://lppyxeoskelndowurxay.supabase.co/functions/v1/marketplace-api";
 
@@ -83,4 +85,52 @@ export function createBooking(input: BookingInput): Promise<BookingResult> {
 export function formatPrice(amount: number, currency: string): string {
   const symbol = currency === "XCG" ? "ƒ" : currency === "EUR" ? "€" : "$";
   return `${symbol}${amount.toFixed(2)}`;
+}
+
+// ---------------------------------------------------------------------------
+// Collapse the raw per-(partner, category) offers into ONE card per car class.
+// The storefront is white-label: a customer chooses a CLASS of car ("a compact,
+// or similar"), never a company. So when several partners offer the same class
+// we show a single card at the cheapest available price and book that partner
+// behind the scenes. The other offers are kept as `alternatives` so a later
+// step can surface a partner's noteworthy extra (e.g. included insurance) as an
+// optional upgrade — without ever exposing who the partner is.
+
+export interface CategoryGroup {
+  /** Stable grouping key (bucket name, or "name:<raw>" when unbucketed). */
+  key: string;
+  /** Clean customer-facing title, e.g. "Compact", "SUV". */
+  title: string;
+  /** Cheapest available offer — the default the Book button acts on. */
+  best: CategoryOffer;
+  /** All offers in this class, cheapest first (includes `best`). */
+  alternatives: CategoryOffer[];
+}
+
+const cheapestFirst = (a: CategoryOffer, b: CategoryOffer) =>
+  (a.from_price ?? Infinity) - (b.from_price ?? Infinity);
+
+export function groupOffers(offers: CategoryOffer[]): CategoryGroup[] {
+  // Local import to keep api.ts free of a hard dependency cycle at module load.
+  const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
+  const groups = new Map<string, { title: string; members: CategoryOffer[] }>();
+
+  for (const o of offers) {
+    const raw = o.category_name || o.name || "";
+    const bucket = categoryBucketExact(raw);
+    const key = bucket ?? `name:${norm(raw)}`;
+    const title = bucket ? bucketLabel(bucket) : (o.name || raw).trim();
+    const g = groups.get(key);
+    if (g) g.members.push(o);
+    else groups.set(key, { title, members: [o] });
+  }
+
+  const out: CategoryGroup[] = [];
+  for (const [key, { title, members }] of groups) {
+    members.sort(cheapestFirst);
+    out.push({ key, title, best: members[0], alternatives: members });
+  }
+  // Cheapest classes first, mirroring the API's own ordering.
+  out.sort((a, b) => cheapestFirst(a.best, b.best));
+  return out;
 }

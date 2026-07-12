@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Layout, { useReveal } from "../components/Layout";
 import CategoryCard from "../components/CategoryCard";
 import BookingModal from "../components/BookingModal";
-import { CategoryOffer, BookingResult, listCategories, formatPrice } from "../api";
+import { CategoryOffer, BookingResult, listCategories, groupOffers, formatPrice } from "../api";
 import { todayPlus, daysBetween } from "../utils";
 import { IconCalendar, IconCheck } from "../components/Icons";
 
@@ -24,6 +24,9 @@ export default function Cars() {
   const [confirmation, setConfirmation] = useState<BookingResult | null>(null);
   const reveal = useReveal();
 
+  // One card per car CLASS (cheapest partner wins) — the storefront is
+  // white-label, so the customer picks a class, never a company.
+  const groups = useMemo(() => groupOffers(offers || []), [offers]);
   const rentalDays = useMemo(() => daysBetween(pickupDate, returnDate), [pickupDate, returnDate]);
   const datesValid = pickupDate < returnDate && pickupDate >= todayPlus(0);
 
@@ -133,10 +136,11 @@ export default function Cars() {
               )}
 
               <div className="cats">
-                {(offers || []).map((offer) => (
+                {groups.map((g) => (
                   <CategoryCard
-                    key={`${offer.tenant_id}-${offer.category_name}`}
-                    offer={offer}
+                    key={g.key}
+                    offer={g.best}
+                    title={g.title}
                     disabled={!datesValid}
                     onBook={setSelected}
                   />
