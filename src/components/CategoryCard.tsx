@@ -97,8 +97,8 @@ export default function CategoryCard({
           <div className="cat-price">
             {hasPrice ? (
               <>
-                <b>{displayPrice(offer.from_price!, offer.currency, displayCurrency)}</b>
-                <span>per day, from{rentalDays > 0 ? ` · ${displayPrice(offer.from_price! * rentalDays, offer.currency, displayCurrency)} total` : ""}</span>
+                <b>{displayPrice(offer.from_price!, offer.currency, displayCurrency)}<span className="cat-per">/day</span></b>
+                <span>{rentalDays > 0 ? `${displayPrice(offer.from_price! * rentalDays, offer.currency, displayCurrency)} for ${rentalDays} ${rentalDays === 1 ? "day" : "days"}` : "from, per day"}</span>
               </>
             ) : (
               <b style={{ fontSize: 16 }}>On request</b>
