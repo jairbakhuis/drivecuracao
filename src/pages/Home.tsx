@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Layout, { useReveal, WHATSAPP } from "../components/Layout";
 import { CarIllustration } from "../components/Brand";
 import CategoryImage from "../components/CategoryImage";
-import { SpecsRow } from "../components/CategoryCard";
+import { SpecsRow, RatingBadge } from "../components/CategoryCard";
 import Marquee from "../components/Marquee";
-import { CategoryOffer, DisplayCurrency, DISPLAY_CURRENCIES, listCategories, groupOffers, displayPrice } from "../api";
+import { CategoryOffer, PartnerReqs, DisplayCurrency, DISPLAY_CURRENCIES, listCategories, groupOffers, ratingFor, displayPrice } from "../api";
 import { todayPlus, daysBetween, FAQS } from "../utils";
 import { IconPin, IconCalendar, IconShield, IconTag, IconChat, IconGlobe, Stars } from "../components/Icons";
 
@@ -27,6 +27,7 @@ export default function Home() {
   const [pickupTime, setPickupTime] = useState("10:00");
   const [returnTime, setReturnTime] = useState("10:00");
   const [offers, setOffers] = useState<CategoryOffer[] | null>(null);
+  const [partners, setPartners] = useState<Record<string, PartnerReqs>>({});
   // Display currency the shopper last chose on the Cars page (USD by default).
   const dc: DisplayCurrency = (() => {
     try {
@@ -38,11 +39,15 @@ export default function Home() {
   const rentalDays = daysBetween(pickupDate, returnDate);
   const datesValid = pickupDate < returnDate;
 
-  useEffect(() => { listCategories().then((r) => setOffers(r.categories)).catch(() => setOffers([])); }, []);
+  useEffect(() => {
+    listCategories()
+      .then((r) => { setOffers(r.categories); setPartners(r.partners || {}); })
+      .catch(() => setOffers([]));
+  }, []);
 
   const search = () => nav(`/cars?pickup=${pickupDate}&return=${returnDate}&pickupTime=${pickupTime}&returnTime=${returnTime}`);
   // One card per car class (cheapest partner) — same collapse as the Cars page.
-  const popular = (offers && offers.length > 0 ? groupOffers(offers).slice(0, 6) : null);
+  const popular = (offers && offers.length > 0 ? groupOffers(offers, partners).slice(0, 6) : null);
 
   return (
     <Layout onHero>
@@ -163,7 +168,10 @@ export default function Home() {
                       <span className="cat-tag">Local partner</span>
                     </div>
                     <div className="cat-body">
-                      <h3>{g.title}</h3>
+                      <div className="cat-head">
+                        <h3>{g.title}</h3>
+                        <RatingBadge rating={ratingFor(o, partners)} />
+                      </div>
                       <p className="cat-similar">or similar — assigned at confirmation</p>
                       <SpecsRow specs={o.specs} />
                       {o.description && <p className="cat-desc">{o.description}</p>}

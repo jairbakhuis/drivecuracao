@@ -1,4 +1,4 @@
-import { CategoryOffer, Specs, DisplayCurrency, displayPrice } from "../api";
+import { CategoryOffer, Specs, DisplayCurrency, displayPrice, CardRating } from "../api";
 import CategoryImage from "./CategoryImage";
 
 /** Optional peace-of-mind option surfaced for this class (see insuranceOption). */
@@ -37,8 +37,25 @@ export function SpecsRow({ specs }: { specs?: Specs }) {
   return <div className="cat-specs">{items}</div>;
 }
 
+/**
+ * Verified rating — the trust substitute that makes booking an unbranded local
+ * partner feel safe (MARKETPLACE_PLAN §3b). Shows the score + review count, or a
+ * neutral "New" pill when the partner has no published reviews yet (never a fake
+ * or empty score).
+ */
+export function RatingBadge({ rating }: { rating?: CardRating | null }) {
+  if (!rating) return <span className="cat-rating cat-rating--new">New</span>;
+  return (
+    <span className="cat-rating" title={`${rating.avg.toFixed(1)} from ${rating.count} verified ${rating.count === 1 ? "review" : "reviews"}`}>
+      <IconStar />
+      <b>{rating.avg.toFixed(1)}</b>
+      <span className="cat-rating-count">· {rating.count}</span>
+    </span>
+  );
+}
+
 export default function CategoryCard({
-  offer, onBook, disabled, title, displayCurrency, rentalDays, insurance,
+  offer, onBook, disabled, title, displayCurrency, rentalDays, insurance, rating,
 }: {
   offer: CategoryOffer;
   onBook: (o: CategoryOffer) => void;
@@ -47,6 +64,7 @@ export default function CategoryCard({
   displayCurrency: DisplayCurrency;
   rentalDays: number;
   insurance?: CardInsurance;
+  rating?: CardRating | null;
 }) {
   const hasPrice = offer.from_price != null;
   return (
@@ -56,7 +74,10 @@ export default function CategoryCard({
         <span className="cat-tag">Local partner</span>
       </div>
       <div className="cat-body">
-        <h3>{title || offer.name}</h3>
+        <div className="cat-head">
+          <h3>{title || offer.name}</h3>
+          <RatingBadge rating={rating} />
+        </div>
         <p className="cat-similar">or similar — assigned at confirmation</p>
         <SpecsRow specs={offer.specs} />
         {offer.description && <p className="cat-desc">{offer.description}</p>}
@@ -88,6 +109,10 @@ export default function CategoryCard({
       </div>
     </article>
   );
+}
+
+function IconStar() {
+  return <svg viewBox="0 0 24 24" width={13} height={13} fill="currentColor" stroke="none" style={{ flexShrink: 0 }}><path d="M12 2.5l2.9 5.9 6.5.95-4.7 4.6 1.1 6.5L12 18l-5.8 3 1.1-6.5-4.7-4.6 6.5-.95z" /></svg>;
 }
 
 function IconShield() {

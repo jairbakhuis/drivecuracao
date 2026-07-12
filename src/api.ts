@@ -48,6 +48,28 @@ export interface PartnerReqs {
   downpayment_amount: number | null;
   currency: string;
   notable_extras?: NotableExtra[];
+  /** Verified average rating (1–5) of this partner, or null when unrated. */
+  avg_rating?: number | null;
+  /** Number of published reviews behind avg_rating. */
+  review_count?: number;
+}
+
+/** Rating shown on a class card — the booking partner's verified rating. */
+export interface CardRating { avg: number; count: number }
+
+/**
+ * The rating to display for a class, i.e. the rating of the partner the Book
+ * button will actually use (the group's `best`). Null when that partner has no
+ * published reviews yet, so the card can show a neutral "New" state instead of
+ * an empty or fake score.
+ */
+export function ratingFor(
+  offer: CategoryOffer,
+  partners: Record<string, PartnerReqs>
+): CardRating | null {
+  const p = partners[offer.tenant_id];
+  if (!p || p.avg_rating == null || !p.review_count) return null;
+  return { avg: Number(p.avg_rating), count: Number(p.review_count) };
 }
 
 export interface BookingInput {
@@ -193,8 +215,29 @@ export interface CategoryGroup {
 const cheapestFirst = (a: CategoryOffer, b: CategoryOffer) =>
   (a.from_price ?? Infinity) - (b.from_price ?? Infinity);
 
-export function groupOffers(offers: CategoryOffer[]): CategoryGroup[] {
-  // Local import to keep api.ts free of a hard dependency cycle at module load.
+/**
+ * Effective price used to RANK offers — real price nudged down slightly for a
+ * strongly-rated partner, so quality wins some placements instead of a pure
+ * race to the bottom (MARKETPLACE_PLAN §3b: don't rank on price alone). The
+ * displayed price is always the real `from_price`; this only affects ordering.
+ *
+ * Conservative and self-disabling: a partner needs ≥3 reviews to earn any
+ * boost, and the boost is capped at 6% (a 4.5★ partner competes as if ~5%
+ * cheaper). With no reviews yet, the boost is 0 → identical to cheapest-first.
+ */
+function rankPrice(o: CategoryOffer, partners?: Record<string, PartnerReqs>): number {
+  const price = o.from_price ?? Infinity;
+  if (!partners || !isFinite(price)) return price;
+  const p = partners[o.tenant_id];
+  if (!p || p.avg_rating == null || !p.review_count || p.review_count < 3) return price;
+  const boost = Math.max(0, Math.min(0.06, (Number(p.avg_rating) - 4) * 0.05));
+  return price * (1 - boost);
+}
+
+export function groupOffers(
+  offers: CategoryOffer[],
+  partners?: Record<string, PartnerReqs>
+): CategoryGroup[] {
   const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
   const groups = new Map<string, { title: string; members: CategoryOffer[] }>();
 
@@ -208,12 +251,17 @@ export function groupOffers(offers: CategoryOffer[]): CategoryGroup[] {
     else groups.set(key, { title, members: [o] });
   }
 
+  // Blended ranking (price nudged by rating); ties and the no-reviews case fall
+  // back to cheapest, then to real price, so ordering stays stable.
+  const blendedFirst = (a: CategoryOffer, b: CategoryOffer) =>
+    rankPrice(a, partners) - rankPrice(b, partners) || cheapestFirst(a, b);
+
   const out: CategoryGroup[] = [];
   for (const [key, { title, members }] of groups) {
-    members.sort(cheapestFirst);
+    members.sort(blendedFirst);
     out.push({ key, title, best: members[0], alternatives: members });
   }
-  // Cheapest classes first, mirroring the API's own ordering.
-  out.sort((a, b) => cheapestFirst(a.best, b.best));
+  // Cheapest (blended) classes first.
+  out.sort((a, b) => blendedFirst(a.best, b.best));
   return out;
 }

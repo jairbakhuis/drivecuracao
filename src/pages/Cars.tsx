@@ -5,7 +5,7 @@ import CategoryCard from "../components/CategoryCard";
 import BookingModal from "../components/BookingModal";
 import {
   CategoryOffer, BookingResult, PartnerReqs, DisplayCurrency, DISPLAY_CURRENCIES,
-  listCategories, groupOffers, insuranceOption, formatPrice,
+  listCategories, groupOffers, insuranceOption, ratingFor, formatPrice,
 } from "../api";
 import { todayPlus, daysBetween } from "../utils";
 import { IconCalendar, IconCheck } from "../components/Icons";
@@ -43,7 +43,7 @@ export default function Cars() {
 
   // One card per car CLASS (cheapest partner wins) — the storefront is
   // white-label, so the customer picks a class, never a company.
-  const groups = useMemo(() => groupOffers(offers || []), [offers]);
+  const groups = useMemo(() => groupOffers(offers || [], partners), [offers, partners]);
   const rentalDays = useMemo(() => daysBetween(pickupDate, returnDate), [pickupDate, returnDate]);
   const datesValid = pickupDate < returnDate && pickupDate >= todayPlus(0);
 
@@ -185,6 +185,7 @@ export default function Cars() {
                       displayCurrency={displayCurrency}
                       rentalDays={rentalDays}
                       insurance={cardIns}
+                      rating={ratingFor(g.best, partners)}
                       onBook={(o) => setSelected({ offer: o })}
                     />
                   );
