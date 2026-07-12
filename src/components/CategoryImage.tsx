@@ -1,25 +1,25 @@
 import { useState } from "react";
 import CategoryIllustration from "./CategoryIllustration";
-import { categoryImagePath } from "../categoryImage";
+import { categoryBucket } from "../categoryImage";
 
 /**
- * Category thumbnail. Default is the branded illustration for the category TYPE
- * (so it's clear the customer picks a class of car, not one specific vehicle).
- * If a professional photo was dropped into public/categories for this bucket,
- * that overrides the illustration; a missing file just falls back cleanly.
- * The tenant's own car photo is intentionally NOT used here — showing a specific
- * car would imply the customer gets that exact vehicle.
+ * Category thumbnail. Prefers a dropped-in illustration for the category bucket
+ * (public/categories/<bucket>.png or .jpg — transparent PNG looks best), and
+ * falls back to the built-in vector only until those are uploaded. Shows a TYPE
+ * of car, never a specific vehicle, so no tenant car photo is used.
  */
 export default function CategoryImage({ name, alt }: { name: string; alt?: string }) {
-  const [failed, setFailed] = useState(false);
-  if (failed) return <CategoryIllustration name={name} />;
+  const bucket = categoryBucket(name);
+  const candidates = [`/categories/${bucket}.png`, `/categories/${bucket}.jpg`];
+  const [i, setI] = useState(0);
+  if (i >= candidates.length) return <CategoryIllustration name={name} />;
   return (
     <img
-      src={categoryImagePath(name)}
+      src={candidates[i]}
       alt={alt || name}
       loading="lazy"
-      onError={() => setFailed(true)}
-      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+      onError={() => setI((n) => n + 1)}
+      style={{ width: "100%", height: "100%", objectFit: "contain", padding: "8px" }}
     />
   );
 }
