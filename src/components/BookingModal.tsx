@@ -122,6 +122,7 @@ export default function BookingModal({ offer, reqs, preselectExtraId, displayCur
       const r = await createBooking({
         tenant_id: offer.tenant_id,
         category_name: offer.category_name,
+        tier: offer.tier,
         rental_start_date: `${pickupDate}T${pickupTime}:00.000Z`,
         rental_end_date: `${returnDate}T${returnTime}:00.000Z`,
         pickup_location_details: pickupLoc,

@@ -166,7 +166,7 @@ export default function Home() {
                     <div className="cat-media">
                       <CategoryImage src={o.image_url} name={o.category_name || o.name} alt={g.title} />
                       <span className="cat-tag">Local partner</span>
-                      {(() => { const tr = carTier(o.specs?.year); return tr && tr.key !== "standard" ? <span className={`cat-tier cat-tier--${tr.key}`} title={tr.blurb}>{tr.label}</span> : null; })()}
+                      {(() => { const tr = carTier(o.specs?.year); return tr ? <span className={`cat-tier cat-tier--${tr.key}`} title={tr.blurb || tr.label}>{tr.label}</span> : null; })()}
                     </div>
                     <div className="cat-body">
                       <div className="cat-head">

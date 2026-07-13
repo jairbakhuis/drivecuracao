@@ -72,8 +72,8 @@ export default function CategoryCard({
       <div className="cat-media">
         <CategoryImage src={offer.image_url} name={offer.category_name || offer.name} alt={title || offer.name} />
         <span className="cat-tag">Local partner</span>
-        {tier && tier.key !== "standard" && (
-          <span className={`cat-tier cat-tier--${tier.key}`} title={tier.blurb}>{tier.label}</span>
+        {tier && (
+          <span className={`cat-tier cat-tier--${tier.key}`} title={tier.blurb || tier.label}>{tier.label}</span>
         )}
       </div>
       <div className="cat-body">

@@ -29,10 +29,12 @@ export interface CarTier {
   year: number;
 }
 
+// Thresholds match marketplace-api's tierOf() so the badge agrees with how the
+// API split the class into tier cards.
 export function carTier(year?: number | null): CarTier | null {
   if (!year || year < 1990) return null;
   const age = new Date().getFullYear() - year;
-  if (age >= 8) {
+  if (age >= 10) {
     return { key: "value", label: "Value", year, blurb: `A well-maintained older car (around ${year}), chosen for the best price. You may get this or a similar car.` };
   }
   if (age <= 2) {
@@ -45,6 +47,8 @@ export interface CategoryOffer {
   tenant_id: string;
   category_name: string;
   name: string;
+  /** Age tier of this offer's representative car (from marketplace-api). */
+  tier?: "value" | "standard" | "newer";
   description: string | null;
   image_url: string | null;
   from_price: number | null;
@@ -101,6 +105,8 @@ export function ratingFor(
 export interface BookingInput {
   tenant_id: string;
   category_name: string;
+  /** Book the cheapest available car of this age tier (must match the chosen card). */
+  tier?: "value" | "standard" | "newer";
   rental_start_date: string; // ISO
   rental_end_date: string; // ISO
   pickup_location_details?: string;
@@ -240,13 +246,15 @@ export function insuranceOption(
 // optional upgrade — without ever exposing who the partner is.
 
 export interface CategoryGroup {
-  /** Stable grouping key (bucket name, or "name:<raw>" when unbucketed). */
+  /** Stable grouping key (class + tier). */
   key: string;
+  /** Class key without the tier — used to keep a class's tier cards together. */
+  classKey: string;
   /** Clean customer-facing title, e.g. "Compact", "SUV". */
   title: string;
-  /** Cheapest available offer — the default the Book button acts on. */
+  /** Cheapest available offer in this (class, tier) — the Book default. */
   best: CategoryOffer;
-  /** All offers in this class, cheapest first (includes `best`). */
+  /** All offers in this (class, tier), cheapest first (includes `best`). */
   alternatives: CategoryOffer[];
 }
 
@@ -277,16 +285,19 @@ export function groupOffers(
   partners?: Record<string, PartnerReqs>
 ): CategoryGroup[] {
   const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
-  const groups = new Map<string, { title: string; members: CategoryOffer[] }>();
+  // One group per (class, tier): a class can show a Value card and a Newer card.
+  const groups = new Map<string, { classKey: string; title: string; members: CategoryOffer[] }>();
 
   for (const o of offers) {
     const raw = o.category_name || o.name || "";
     const bucket = categoryBucketExact(raw);
-    const key = bucket ?? `name:${norm(raw)}`;
+    const classKey = bucket ?? `name:${norm(raw)}`;
     const title = bucket ? bucketLabel(bucket) : (o.name || raw).trim();
+    const tier = o.tier ?? "standard";
+    const key = `${classKey}::${tier}`;
     const g = groups.get(key);
     if (g) g.members.push(o);
-    else groups.set(key, { title, members: [o] });
+    else groups.set(key, { classKey, title, members: [o] });
   }
 
   // Blended ranking (price nudged by rating); ties and the no-reviews case fall
@@ -295,11 +306,22 @@ export function groupOffers(
     rankPrice(a, partners) - rankPrice(b, partners) || cheapestFirst(a, b);
 
   const out: CategoryGroup[] = [];
-  for (const [key, { title, members }] of groups) {
+  for (const [key, { classKey, title, members }] of groups) {
     members.sort(blendedFirst);
-    out.push({ key, title, best: members[0], alternatives: members });
+    out.push({ key, classKey, title, best: members[0], alternatives: members });
   }
-  // Cheapest (blended) classes first.
-  out.sort((a, b) => blendedFirst(a.best, b.best));
+
+  // Order classes by their cheapest tier, and keep a class's tier cards adjacent
+  // (cheapest tier first within the class).
+  const classMin = new Map<string, number>();
+  for (const g of out) {
+    const p = g.best.from_price ?? Infinity;
+    if (!classMin.has(g.classKey) || p < classMin.get(g.classKey)!) classMin.set(g.classKey, p);
+  }
+  out.sort((a, b) =>
+    (classMin.get(a.classKey)! - classMin.get(b.classKey)!) ||
+    a.classKey.localeCompare(b.classKey) ||
+    blendedFirst(a.best, b.best)
+  );
   return out;
 }

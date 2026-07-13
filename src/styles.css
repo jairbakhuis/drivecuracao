@@ -238,6 +238,7 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .cat-tier { position: absolute; top: 12px; right: 12px; font-size: 11px; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; backdrop-filter: blur(4px); }
 .cat-tier--value { background: rgba(242,193,78,0.95); color: #4a3200; }
 .cat-tier--newer { background: rgba(23,132,122,0.92); color: #fff; }
+.cat-tier--standard { background: rgba(11,58,58,0.72); color: #fff; }
 .cat-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
 .cat-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .cat-body h3 { font-size: 19px; }
