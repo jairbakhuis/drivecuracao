@@ -13,6 +13,32 @@ export interface Specs {
   transmission: string | null;
   fuel: string | null;
   aircon: boolean;
+  year?: number | null;
+}
+
+/**
+ * Age tier for the representative (cheapest) car in a class. Sets the
+ * expectation that a budget price means an older — but maintained — car, so
+ * customers self-select knowingly instead of being surprised (and leaving an
+ * unfair review). Returns null when we don't know the year.
+ */
+export interface CarTier {
+  key: "value" | "standard" | "newer";
+  label: string;
+  blurb: string;
+  year: number;
+}
+
+export function carTier(year?: number | null): CarTier | null {
+  if (!year || year < 1990) return null;
+  const age = new Date().getFullYear() - year;
+  if (age >= 8) {
+    return { key: "value", label: "Value", year, blurb: `A well-maintained older car (around ${year}), chosen for the best price. You may get this or a similar car.` };
+  }
+  if (age <= 2) {
+    return { key: "newer", label: "Newer", year, blurb: `A recent model (around ${year} or newer).` };
+  }
+  return { key: "standard", label: "Standard", year, blurb: "" };
 }
 
 export interface CategoryOffer {

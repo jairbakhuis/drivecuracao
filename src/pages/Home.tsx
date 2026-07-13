@@ -5,7 +5,7 @@ import { CarIllustration } from "../components/Brand";
 import CategoryImage from "../components/CategoryImage";
 import { SpecsRow, RatingBadge } from "../components/CategoryCard";
 import Marquee from "../components/Marquee";
-import { CategoryOffer, PartnerReqs, DisplayCurrency, DISPLAY_CURRENCIES, listCategories, groupOffers, ratingFor, displayPrice } from "../api";
+import { CategoryOffer, PartnerReqs, DisplayCurrency, DISPLAY_CURRENCIES, listCategories, groupOffers, ratingFor, carTier, displayPrice } from "../api";
 import { todayPlus, daysBetween, FAQS } from "../utils";
 import { IconPin, IconCalendar, IconShield, IconTag, IconChat, IconGlobe, Stars } from "../components/Icons";
 
@@ -166,6 +166,7 @@ export default function Home() {
                     <div className="cat-media">
                       <CategoryImage src={o.image_url} name={o.category_name || o.name} alt={g.title} />
                       <span className="cat-tag">Local partner</span>
+                      {(() => { const tr = carTier(o.specs?.year); return tr && tr.key !== "standard" ? <span className={`cat-tier cat-tier--${tr.key}`} title={tr.blurb}>{tr.label}</span> : null; })()}
                     </div>
                     <div className="cat-body">
                       <div className="cat-head">

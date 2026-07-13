@@ -1,4 +1,4 @@
-import { CategoryOffer, Specs, DisplayCurrency, displayPrice, CardRating } from "../api";
+import { CategoryOffer, Specs, DisplayCurrency, displayPrice, CardRating, CarTier } from "../api";
 import CategoryImage from "./CategoryImage";
 
 /** Optional peace-of-mind option surfaced for this class (see insuranceOption). */
@@ -55,7 +55,7 @@ export function RatingBadge({ rating }: { rating?: CardRating | null }) {
 }
 
 export default function CategoryCard({
-  offer, onBook, disabled, title, displayCurrency, insurance, rating,
+  offer, onBook, disabled, title, displayCurrency, insurance, rating, tier,
 }: {
   offer: CategoryOffer;
   onBook: (o: CategoryOffer) => void;
@@ -64,6 +64,7 @@ export default function CategoryCard({
   displayCurrency: DisplayCurrency;
   insurance?: CardInsurance;
   rating?: CardRating | null;
+  tier?: CarTier | null;
 }) {
   const hasPrice = offer.from_price != null;
   return (
@@ -71,6 +72,9 @@ export default function CategoryCard({
       <div className="cat-media">
         <CategoryImage src={offer.image_url} name={offer.category_name || offer.name} alt={title || offer.name} />
         <span className="cat-tag">Local partner</span>
+        {tier && tier.key !== "standard" && (
+          <span className={`cat-tier cat-tier--${tier.key}`} title={tier.blurb}>{tier.label}</span>
+        )}
       </div>
       <div className="cat-body">
         <div className="cat-head">

@@ -5,7 +5,7 @@ import CategoryCard from "../components/CategoryCard";
 import BookingModal from "../components/BookingModal";
 import {
   CategoryOffer, BookingResult, PartnerReqs, DisplayCurrency, DISPLAY_CURRENCIES,
-  listCategories, groupOffers, insuranceOption, ratingFor, formatPrice,
+  listCategories, groupOffers, insuranceOption, ratingFor, carTier, formatPrice,
 } from "../api";
 import { todayPlus, daysBetween } from "../utils";
 import { IconCalendar, IconCheck } from "../components/Icons";
@@ -185,6 +185,7 @@ export default function Cars() {
                       displayCurrency={displayCurrency}
                       insurance={cardIns}
                       rating={ratingFor(g.best, partners)}
+                      tier={carTier(g.best.specs?.year)}
                       onBook={(o) => setSelected({ offer: o })}
                     />
                   );

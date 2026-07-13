@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { CategoryOffer, BookingResult, PartnerReqs, NotableExtra, DisplayCurrency, createBooking, displayPrice } from "../api";
+import { CategoryOffer, BookingResult, PartnerReqs, NotableExtra, DisplayCurrency, createBooking, displayPrice, carTier } from "../api";
+import CategoryImage from "./CategoryImage";
 
 interface Props {
   offer: CategoryOffer;
@@ -152,12 +153,25 @@ export default function BookingModal({ offer, reqs, preselectExtraId, displayCur
           <h2>Book a {offer.name}</h2>
           <button className="modal-close" onClick={onClose} aria-label="Close">×</button>
         </div>
+        {/* The partner's ACTUAL car (preferSrc), so the customer sees the real
+            vehicle at the point of decision; falls back to the class image. */}
+        <div className="modal-car">
+          <CategoryImage preferSrc src={offer.image_url} name={offer.category_name || offer.name} alt={offer.name} />
+        </div>
         <p className="modal-sub">
           {pickupDate} {pickupTime} → {returnDate} {returnTime} · {rentalDays} day{rentalDays !== 1 ? "s" : ""}
           {offer.from_price != null && (
             <> · est. <b>{money(estTotal)}</b> total · pay at pickup</>
           )}
         </p>
+        {(() => {
+          const tier = carTier(offer.specs?.year);
+          return tier && tier.blurb ? (
+            <p className={`modal-tier modal-tier--${tier.key}`}>
+              <b>{tier.label} car.</b> {tier.blurb}
+            </p>
+          ) : null;
+        })()}
         {reqs?.deposit_enabled && reqs.deposit_amount ? (
           <p className="modal-note">A refundable deposit of {money(reqs.deposit_amount)} is held at pickup.</p>
         ) : null}

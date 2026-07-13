@@ -10,13 +10,13 @@ import { categoryBucket } from "../categoryImage";
  * vector only as a last resort. Represents a TYPE of car ("or similar"), never a
  * promise of one specific vehicle.
  */
-export default function CategoryImage({ src, name, alt }: { src?: string | null; name: string; alt?: string }) {
+export default function CategoryImage({ src, name, alt, preferSrc }: { src?: string | null; name: string; alt?: string; preferSrc?: boolean }) {
   const bucket = categoryBucket(name);
-  const candidates = [
-    `/categories/${bucket}.jpg`,
-    `/categories/${bucket}.png`,
-    ...(src ? [src] : []),
-  ];
+  // Browse grid: our consistent class image wins. Checkout (preferSrc): show the
+  // partner's ACTUAL car first so the customer sees the real vehicle they'll get.
+  const own = [`/categories/${bucket}.jpg`, `/categories/${bucket}.png`];
+  const partner = src ? [src] : [];
+  const candidates = preferSrc ? [...partner, ...own] : [...own, ...partner];
   const [i, setI] = useState(0);
   if (i >= candidates.length) return <CategoryIllustration name={name} />;
   return (
