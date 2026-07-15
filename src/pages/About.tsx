@@ -61,8 +61,8 @@ export default function About() {
           <div className="cta-band" style={{ background: "linear-gradient(120deg, var(--coral), var(--gold))" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
               <h2>Own a rental company in Curaçao?</h2>
-              <p>List your cars on Drive Curaçao and get extra bookings — you only pay when we bring you a paying customer.</p>
-              <a className="btn btn-dark btn-lg" href={WHATSAPP} target="_blank" rel="noreferrer">Become a partner</a>
+              <p>List your cars on Drive Curaçao and get extra bookings — powered by SuaveCars, so you run everything in one place.</p>
+              <Link className="btn btn-dark btn-lg" to="/for-rental-companies">List your cars</Link>
             </div>
           </div>
         </div>

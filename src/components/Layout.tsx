@@ -48,6 +48,7 @@ export default function Layout({ children, onHero = false }: { children: React.R
             <NavLink to="/how-it-works">How it works</NavLink>
             <NavLink to="/about">About</NavLink>
             <NavLink to="/faq">FAQ</NavLink>
+            <NavLink to="/for-rental-companies">List your cars</NavLink>
             <a className="btn btn-coral nav-cta" href={WHATSAPP} target="_blank" rel="noreferrer">Get help</a>
           </div>
           <button
@@ -86,6 +87,7 @@ function Footer() {
             <Link to="/how-it-works">How it works</Link>
             <Link to="/about">About us</Link>
             <Link to="/faq">FAQ</Link>
+            <Link to="/for-rental-companies">List your cars</Link>
           </div>
           <div>
             <h4>Categories</h4>
