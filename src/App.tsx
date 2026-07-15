@@ -5,6 +5,7 @@ import HowItWorks from "./pages/HowItWorks";
 import About from "./pages/About";
 import Faq from "./pages/Faq";
 import Review from "./pages/Review";
+import ForRentalCompanies from "./pages/ForRentalCompanies";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/about" element={<About />} />
       <Route path="/faq" element={<Faq />} />
       <Route path="/review" element={<Review />} />
+      <Route path="/for-rental-companies" element={<ForRentalCompanies />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
