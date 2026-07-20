@@ -8,6 +8,11 @@ Customers pay at pickup — the site never handles money.
 Part of the SuaveCars marketplace program — see `MARKETPLACE_PLAN.md` in the
 `suavecarssaas` repo for the full plan (fees, transparency, invoicing).
 
+> **SuaveCars ecosystem — three separate repos:** `suavecarssaas` (the SaaS app →
+> saas.suavecars.com), `suavecars` (marketing site → suavecars.com), and
+> `drivecuracao` (this repo). Full map, deploy playbook and open items live in
+> **`HANDOFF.md` in the `suavecarssaas` repo** — read that first when picking up work.
+
 ## Stack
 
 - Vite + React + TypeScript, single hand-rolled stylesheet (design tokens in
