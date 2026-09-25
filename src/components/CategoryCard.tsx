@@ -81,7 +81,7 @@ export default function CategoryCard({
           <h3>{title || offer.name}</h3>
           <RatingBadge rating={rating} />
         </div>
-        <p className="cat-similar">or similar — assigned at confirmation</p>
+        <p className="cat-similar">Request this category — final car confirmed by the local rental company</p>
         <SpecsRow specs={offer.specs} />
         {offer.description && <p className="cat-desc">{offer.description}</p>}
 
@@ -101,13 +101,13 @@ export default function CategoryCard({
             {hasPrice ? (
               <>
                 <b>{displayPrice(offer.from_price!, offer.currency, displayCurrency)}<span className="cat-per">/day</span></b>
-                <span>from · pay at pickup</span>
+                <span>from · no payment today</span>
               </>
             ) : (
               <b style={{ fontSize: 16 }}>On request</b>
             )}
           </div>
-          <button className="btn btn-teal" disabled={disabled} onClick={() => onBook(offer)}>Book</button>
+          <button className="btn btn-teal" disabled={disabled} onClick={() => onBook(offer)}>Request car</button>
         </div>
       </div>
     </article>
