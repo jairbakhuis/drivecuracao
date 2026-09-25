@@ -173,14 +173,14 @@ export default function Home() {
                         <h3>{g.title}</h3>
                         <RatingBadge rating={ratingFor(o, partners)} />
                       </div>
-                      <p className="cat-similar">or similar — assigned at confirmation</p>
+                      <p className="cat-similar">Request this category — final car confirmed by the local rental company</p>
                       <SpecsRow specs={o.specs} />
                       {o.description && <p className="cat-desc">{o.description}</p>}
                       <div className="cat-foot">
                         <div className="cat-price">
-                          {o.from_price != null ? <><b>{displayPrice(o.from_price, o.currency, dc)}</b><span>per day, from</span></> : <b style={{ fontSize: 16 }}>On request</b>}
+                          {o.from_price != null ? <><b>{displayPrice(o.from_price, o.currency, dc)}</b><span>from · no payment today</span></> : <b style={{ fontSize: 16 }}>On request</b>}
                         </div>
-                        <Link className="btn btn-quick" to={`/cars?pickup=${pickupDate}&return=${returnDate}`}>Quick book</Link>
+                        <Link className="btn btn-quick" to={`/cars?pickup=${pickupDate}&return=${returnDate}`}>Request car</Link>
                       </div>
                     </div>
                   </article>
@@ -192,11 +192,11 @@ export default function Home() {
                     <div className="cat-media"><CarIllustration variant={i} /><span className="cat-tag">Coming soon</span></div>
                     <div className="cat-body">
                       <h3>{s.name}</h3>
-                      <p className="cat-similar">or similar — assigned at confirmation</p>
+                      <p className="cat-similar">Request this category — final car confirmed by the local rental company</p>
                       <p className="cat-desc">{s.desc}</p>
                       <div className="cat-foot">
-                        <div className="cat-price"><b>{s.price}</b><span>per day, from</span></div>
-                        <Link className="btn btn-quick" to="/cars">Quick book</Link>
+                        <div className="cat-price"><b>{s.price}</b><span>from · no payment today</span></div>
+                        <Link className="btn btn-quick" to="/cars">Request car</Link>
                       </div>
                     </div>
                   </article>
@@ -284,4 +284,3 @@ export default function Home() {
     </Layout>
   );
 }
-
