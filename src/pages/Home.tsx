@@ -242,7 +242,7 @@ export default function Home() {
               <h2>What travelers say</h2>
             </div>
             <div className="quotes">
-              <div className="quote reveal"><div className="stars"><Stars /></div><p>"Booked in two minutes, picked up the car right at the airport, paid on the spot. So much easier than emailing five companies."</p><div className="who"><span className="av">L</span><div><b>Lisa M.</b><span>Netherlands · Compact</span></div></div></div>
+              <div className="quote reveal"><div className="stars"><Stars /></div><p>"Requested a car in two minutes, picked it up right at the airport, and paid on the spot. So much easier than emailing five companies."</p><div className="who"><span className="av">L</span><div><b>Lisa M.</b><span>Netherlands · Compact</span></div></div></div>
               <div className="quote reveal"><div className="stars"><Stars /></div><p>"Loved that there was no prepayment. The local company was friendly and the price was exactly what the site showed."</p><div className="who"><span className="av">D</span><div><b>Daniel R.</b><span>USA · SUV</span></div></div></div>
               <div className="quote reveal"><div className="stars"><Stars /></div><p>"WhatsApp answered in Papiamentu within minutes and sorted an automatic for us. Highly recommend for the island."</p><div className="who"><span className="av">S</span><div><b>Shanice B.</b><span>Curaçao · Automatic</span></div></div></div>
             </div>
@@ -274,7 +274,7 @@ export default function Home() {
         <div className="container">
           <span className="sticker s-gold tilt-l" style={{ marginBottom: 20 }}>Free to search</span>
           <h2 className="poster cta-poster">More island,<br />less hassle.</h2>
-          <p>Find your rental car in under a minute. No account, no prepayment — you pay the local company at pickup.</p>
+          <p>Request your rental car in under a minute. No account, no prepayment — you pay the local company at pickup.</p>
           <div className="btns">
             <button className="btn btn-quick btn-lg" onClick={search}>Search cars</button>
             <a className="btn btn-dark btn-lg" href={WHATSAPP} target="_blank" rel="noreferrer">Chat on WhatsApp</a>
