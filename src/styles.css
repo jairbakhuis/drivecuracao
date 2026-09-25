@@ -184,10 +184,11 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 }
 .search-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 14px; align-items: end; }
 @media (max-width: 620px) { .search-grid { grid-template-columns: 1fr 1fr; } .search-grid .btn { grid-column: 1 / -1; } }
+@media (max-width: 460px) { .search-grid { grid-template-columns: 1fr; } }
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field label { font-family: var(--display); font-weight: 600; font-size: 11.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
 .field input, .field select, .field textarea {
-  border: 1.5px solid var(--line); border-radius: 13px; padding: 12px 13px; font-size: 15.5px;
+  border: 1.5px solid var(--line); border-radius: 13px; padding: 12px 13px; font-size: 16px;
   font-family: inherit; color: var(--ink); background: var(--card); width: 100%;
 }
 .field textarea { resize: vertical; min-height: 92px; }
@@ -332,7 +333,7 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
 @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
 .form label { display: flex; flex-direction: column; gap: 5px; font-size: 12.5px; font-weight: 700; color: var(--ink); }
-.form input, .form select { border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 12px; font-size: 15.5px; font-family: inherit; background: #fff; color: var(--ink); }
+.form input, .form select { border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 12px; font-size: 16px; font-family: inherit; background: #fff; color: var(--ink); }
 .form input:focus-visible, .form select:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px; }
 .form label.check { flex-direction: row; align-items: center; gap: 9px; font-weight: 600; font-size: 14px; cursor: pointer; }
 .form label.check input { width: 17px; height: 17px; accent-color: var(--teal); }
