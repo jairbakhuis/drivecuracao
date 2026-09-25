@@ -165,6 +165,11 @@ export default function BookingModal({ offer, reqs, preselectExtraId, displayCur
             <> · est. <b>{money(estTotal)}</b> total · pay at pickup</>
           )}
         </p>
+        <div className="modal-trust" aria-label="Booking reassurance">
+          <span>No payment today</span>
+          <span>Free cancellation before pickup</span>
+          <span>Local company confirms by email</span>
+        </div>
         {(() => {
           const tier = carTier(offer.specs?.year);
           return tier && tier.blurb ? (

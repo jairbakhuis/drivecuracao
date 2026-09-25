@@ -325,6 +325,9 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .modal-close { border: none; background: var(--sand-2); border-radius: 10px; width: 34px; height: 34px; font-size: 20px; cursor: pointer; color: var(--muted); flex: none; }
 .modal-sub { color: var(--muted); font-size: 14.5px; margin: 8px 0 20px; }
 .modal-sub b { color: var(--ink); }
+.modal-trust { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: -8px 0 16px; }
+.modal-trust span { background: var(--sand); border: 1px solid var(--line-soft); border-radius: 11px; padding: 9px 10px; color: var(--ink); font-size: 12px; font-weight: 800; line-height: 1.25; text-align: center; }
+@media (max-width: 520px) { .modal-trust { grid-template-columns: 1fr; } }
 .form { display: flex; flex-direction: column; gap: 15px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
 @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
