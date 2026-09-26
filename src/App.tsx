@@ -7,6 +7,7 @@ import Faq from "./pages/Faq";
 import Review from "./pages/Review";
 import ForRentalCompanies from "./pages/ForRentalCompanies";
 import AutoHurenCuracao from "./pages/AutoHurenCuracao";
+import CarRentalAirport from "./pages/CarRentalAirport";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
       <Route path="/review" element={<Review />} />
       <Route path="/for-rental-companies" element={<ForRentalCompanies />} />
       <Route path="/auto-huren-curacao" element={<AutoHurenCuracao />} />
+      <Route path="/car-rental-curacao-airport" element={<CarRentalAirport />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
