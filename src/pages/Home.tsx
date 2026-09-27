@@ -234,6 +234,25 @@ export default function Home() {
           </div>
         </section>
 
+        {/* RENTAL GUIDES */}
+        <section className="section">
+          <div className="container">
+            <div className="section-head reveal">
+              <span className="eyebrow">Rental guides</span>
+              <h2>Plan your Curaçao car rental</h2>
+              <p>Helpful pages for popular searches, pickup plans, and budget-friendly rental choices.</p>
+            </div>
+            <div className="quotes">
+              <Link className="quote reveal" to="/auto-huren-curacao"><h3>Auto huren Curaçao</h3><p>Dutch guide for renting a car locally with no prepayment.</p></Link>
+              <Link className="quote reveal" to="/car-rental-curacao-airport"><h3>Curaçao airport car rental</h3><p>Request airport pickup for Hato International Airport arrivals.</p></Link>
+              <Link className="quote reveal" to="/cheap-car-rental-curacao"><h3>Cheap car rental Curaçao</h3><p>Compare affordable categories and keep your island transport cost lower.</p></Link>
+            </div>
+            <div style={{ textAlign: "center", marginTop: 22 }}>
+              <Link className="btn btn-ghost" to="/rent-a-car-willemstad">Rent a car in Willemstad →</Link>
+            </div>
+          </div>
+        </section>
+
         {/* TESTIMONIALS */}
         <section className="section">
           <div className="container">
