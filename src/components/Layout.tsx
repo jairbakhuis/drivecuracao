@@ -90,11 +90,11 @@ function Footer() {
             <Link to="/for-rental-companies">List your cars</Link>
           </div>
           <div>
-            <h4>Categories</h4>
-            <Link to="/cars">Economy</Link>
-            <Link to="/cars">Compact</Link>
-            <Link to="/cars">SUV</Link>
-            <Link to="/cars">Automatic</Link>
+            <h4>Car rental guides</h4>
+            <Link to="/auto-huren-curacao">Auto huren Curaçao</Link>
+            <Link to="/car-rental-curacao-airport">Curaçao airport car rental</Link>
+            <Link to="/cheap-car-rental-curacao">Cheap car rental Curaçao</Link>
+            <Link to="/rent-a-car-willemstad">Rent a car Willemstad</Link>
           </div>
           <div>
             <h4>Contact</h4>
