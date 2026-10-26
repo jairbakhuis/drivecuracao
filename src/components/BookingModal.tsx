@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CategoryOffer, BookingResult, PartnerReqs, NotableExtra, DisplayCurrency, createBooking, displayPrice, carTier } from "../api";
 import CategoryImage from "./CategoryImage";
+import { curacaoLocalDateTimeISO } from "../utils";
 
 interface Props {
   offer: CategoryOffer;
@@ -56,9 +57,59 @@ function locString(place: string, detail: string): string {
 }
 
 export default function BookingModal({ offer, reqs, preselectExtraId, displayCurrency, pickupDate, returnDate, pickupTime, returnTime, rentalDays, onClose, onBooked }: Props) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef(onClose);
+  const submittingRef = useRef(false);
   const [form, setForm] = useState(empty);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  closeRef.current = onClose;
+  submittingRef.current = submitting;
+
+  useEffect(() => {
+    const modal = modalRef.current;
+    if (!modal) return;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    const heading = modal.querySelector<HTMLElement>("#booking-dialog-title");
+    document.body.style.overflow = "hidden";
+    heading?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !submittingRef.current) {
+        event.preventDefault();
+        closeRef.current();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(modal.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter((element) => element.getAttribute("aria-hidden") !== "true");
+      if (!focusable.length) {
+        event.preventDefault();
+        heading?.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!modal.contains(document.activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      } else if (event.shiftKey && (document.activeElement === first || document.activeElement === heading)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || document.activeElement === heading)) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
+    };
+  }, []);
 
   const extras = reqs?.notable_extras ?? [];
   const [chosenExtras, setChosenExtras] = useState<string[]>(
@@ -123,8 +174,8 @@ export default function BookingModal({ offer, reqs, preselectExtraId, displayCur
         tenant_id: offer.tenant_id,
         category_name: offer.category_name,
         tier: offer.tier,
-        rental_start_date: `${pickupDate}T${pickupTime}:00.000Z`,
-        rental_end_date: `${returnDate}T${returnTime}:00.000Z`,
+        rental_start_date: curacaoLocalDateTimeISO(pickupDate, pickupTime),
+        rental_end_date: curacaoLocalDateTimeISO(returnDate, returnTime),
         pickup_location_details: pickupLoc,
         return_location_details: dropoffLoc,
         flight_number: form.flight_number || undefined,
@@ -149,22 +200,25 @@ export default function BookingModal({ offer, reqs, preselectExtraId, displayCur
 
   return (
     <div className="modal-backdrop" onClick={() => !submitting && onClose()}>
-      <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+      <div ref={modalRef} className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="booking-dialog-title" aria-describedby="booking-dialog-summary">
         <div className="modal-head">
-          <h2>Book a {offer.name}</h2>
-          <button className="modal-close" onClick={onClose} aria-label="Close">×</button>
+          <h2 id="booking-dialog-title" tabIndex={-1}>Book a {offer.name}</h2>
+          <button type="button" className="modal-close" onClick={onClose} disabled={submitting} aria-label="Close booking form">×</button>
         </div>
         {/* The partner's ACTUAL car (preferSrc), so the customer sees the real
             vehicle at the point of decision; falls back to the class image. */}
         <div className="modal-car">
           <CategoryImage preferSrc src={offer.image_url} name={offer.category_name || offer.name} alt={offer.name} />
         </div>
-        <p className="modal-sub">
-          {pickupDate} {pickupTime} → {returnDate} {returnTime} · {rentalDays} day{rentalDays !== 1 ? "s" : ""}
+        <p id="booking-dialog-summary" className="modal-sub">
+          {pickupDate} {pickupTime} → {returnDate} {returnTime} (Curaçao local time) · {rentalDays} day{rentalDays !== 1 ? "s" : ""}
           {offer.from_price != null && (
             <> · est. <b>{money(estTotal)}</b> total · pay at pickup</>
           )}
         </p>
+        {displayCurrency !== offer.currency && (
+          <p className="currency-note">Displayed as an estimate in {displayCurrency}; the rental company charges in {offer.currency} at pickup.</p>
+        )}
         <div className="modal-trust" aria-label="Booking reassurance">
           <span>No payment today</span>
           <span>Free cancellation before pickup</span>
@@ -191,7 +245,7 @@ export default function BookingModal({ offer, reqs, preselectExtraId, displayCur
               </select>
             </label>
             {needsDetail(form.pickup_place) ? (
-              <label>Hotel name / address<input value={form.pickup_detail} onChange={setText("pickup_detail")} placeholder="e.g. Marriott, Piscadera" /></label>
+              <label>Hotel name / address<input required value={form.pickup_detail} onChange={setText("pickup_detail")} placeholder="e.g. Marriott, Piscadera" /></label>
             ) : <span />}
           </div>
           <label className="check">
@@ -206,7 +260,7 @@ export default function BookingModal({ offer, reqs, preselectExtraId, displayCur
                 </select>
               </label>
               {needsDetail(form.dropoff_place) ? (
-                <label>Hotel name / address<input value={form.dropoff_detail} onChange={setText("dropoff_detail")} placeholder="e.g. Marriott, Piscadera" /></label>
+                <label>Hotel name / address<input required value={form.dropoff_detail} onChange={setText("dropoff_detail")} placeholder="e.g. Marriott, Piscadera" /></label>
               ) : <span />}
             </div>
           )}
@@ -265,7 +319,7 @@ export default function BookingModal({ offer, reqs, preselectExtraId, displayCur
             <label>Anything we should know?<input value={form.notes} onChange={setText("notes")} placeholder="Child seat, extra driver, etc." /></label>
           </div>
 
-          {error && <p className="form-error">{error}</p>}
+          {error && <p className="form-error" role="alert">{error}</p>}
           <button className="btn btn-coral btn-block" disabled={submitting}>
             {submitting ? "Sending…" : "Book now — pay at pickup"}
           </button>

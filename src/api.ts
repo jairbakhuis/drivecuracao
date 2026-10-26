@@ -2,7 +2,7 @@
 // The storefront is white-label: tenant_id is an opaque routing key and is
 // never shown to the customer.
 
-import { categoryBucketExact, bucketLabel } from "./categoryImage";
+import { categoryBucketExact, bucketLabel } from "./categoryImage.ts";
 
 const API_URL =
   "https://lppyxeoskelndowurxay.supabase.co/functions/v1/marketplace-api";
@@ -135,6 +135,8 @@ export interface BookingResult {
   daily_rate: number;
   rental_days: number;
   payment: string;
+  /** Currency returned with the total, when the API includes it. */
+  currency?: string;
   confirmed?: boolean;
 }
 
@@ -187,17 +189,19 @@ export function submitReview(input: ReviewInput): Promise<{ ok: boolean; review_
 }
 
 export function formatPrice(amount: number, currency: string): string {
-  const symbol = currency === "XCG" || currency === "ANG" ? "ƒ" : currency === "EUR" ? "€" : "$";
+  if (currency === "XCG") return `XCG ${amount.toFixed(2)}`;
+  const symbol = currency === "ANG" ? "ƒ" : currency === "EUR" ? "€" : "$";
   return `${symbol}${amount.toFixed(2)}`;
 }
 
 // ---------------------------------------------------------------------------
 // Display-currency conversion. Rental companies price in their own currency and
 // you always pay THEM in it at pickup — so this is a shopper convenience only,
-// to compare classes in one currency. USD is the default. USD↔ANG is a fixed
-// peg (guilder); EUR floats, so it's an estimate. Keep these easy to refresh.
+// to compare classes in one currency. USD is the default. USD↔XCG is a fixed
+// peg (Caribbean guilder); legacy ANG offers share that peg. EUR floats, so it's
+// an estimate. Keep these easy to refresh.
 
-export const DISPLAY_CURRENCIES = ["USD", "EUR", "ANG"] as const;
+export const DISPLAY_CURRENCIES = ["USD", "EUR", "XCG"] as const;
 export type DisplayCurrency = (typeof DISPLAY_CURRENCIES)[number];
 
 // Rates expressed as "1 USD = N <code>".

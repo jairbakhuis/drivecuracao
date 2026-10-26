@@ -43,7 +43,7 @@ export default function Layout({ children, onHero = false }: { children: React.R
       <nav className={`nav${scrolled ? " scrolled" : ""}${onHero ? " on-hero" : " scrolled"}`}>
         <div className="container nav-inner">
           <Link to="/" aria-label="Drive Curaçao home"><Wordmark /></Link>
-          <div className={`nav-links${menuOpen ? " open" : ""}`}>
+          <div id="primary-navigation" className={`nav-links${menuOpen ? " open" : ""}`}>
             <NavLink to="/cars">Browse cars</NavLink>
             <NavLink to="/how-it-works">How it works</NavLink>
             <NavLink to="/about">About</NavLink>
@@ -53,7 +53,9 @@ export default function Layout({ children, onHero = false }: { children: React.R
           </div>
           <button
             className="nav-mobile-toggle"
-            aria-label="Menu"
+            type="button"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-controls="primary-navigation"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
           >

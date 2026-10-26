@@ -113,6 +113,7 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .nav.on-hero:not(.scrolled) .nav-links a { color: #fff; opacity: 0.9; }
 .nav.on-hero:not(.scrolled) .nav-links a.active { color: var(--gold); }
 .nav-mobile-toggle { display: none; background: none; border: none; cursor: pointer; }
+.nav-mobile-toggle:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
 @media (max-width: 860px) {
   .nav-links { position: fixed; inset: 72px 0 auto 0; flex-direction: column; align-items: stretch; gap: 0;
     background: var(--card); box-shadow: var(--shadow); padding: 8px; transform: translateY(-140%); transition: transform 0.25s; }
@@ -326,6 +327,8 @@ h3, h4 { font-family: var(--display); color: var(--ink); line-height: 1.15; lett
 .modal-close { border: none; background: var(--sand-2); border-radius: 10px; width: 34px; height: 34px; font-size: 20px; cursor: pointer; color: var(--muted); flex: none; }
 .modal-sub { color: var(--muted); font-size: 14.5px; margin: 8px 0 20px; }
 .modal-sub b { color: var(--ink); }
+.currency-note { color: var(--muted); font-size: 12.5px; line-height: 1.45; margin: -12px 0 16px; }
+.currency-disclaimer { color: var(--muted); font-size: 12.5px; line-height: 1.45; margin: 8px 0 0; }
 .modal-trust { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: -8px 0 16px; }
 .modal-trust span { background: var(--sand); border: 1px solid var(--line-soft); border-radius: 11px; padding: 9px 10px; color: var(--ink); font-size: 12px; font-weight: 800; line-height: 1.25; text-align: center; }
 @media (max-width: 520px) { .modal-trust { grid-template-columns: 1fr; } }

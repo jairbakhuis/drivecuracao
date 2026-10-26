@@ -1,7 +1,42 @@
+const CURACAO_TIME_ZONE = "America/Curacao";
+
+/** Calendar date in Curaçao, independent of the visitor's device timezone. */
 export function todayPlus(days: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
+  const parts = new Intl.DateTimeFormat("en", {
+    timeZone: CURACAO_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const value = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  const date = new Date(Date.UTC(Number(value.year), Number(value.month) - 1, Number(value.day) + days));
+  return date.toISOString().slice(0, 10);
+}
+
+/** Add days to a YYYY-MM-DD calendar date without local/UTC rollover. */
+export function addCalendarDays(value: string, days: number): string {
+  if (!isCalendarDate(value)) throw new RangeError(`Invalid calendar date: ${value}`);
+  const date = new Date(`${value}T00:00:00.000Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
+export function isCalendarDate(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
+/** Serialize a Curaçao wall-clock time with its explicit year-round UTC-04:00 offset. */
+export function curacaoLocalDateTimeISO(date: string, time: string): string {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) {
+    throw new RangeError("Invalid Curaçao date or time");
+  }
+  const [hour, minute] = time.split(":").map(Number);
+  if (hour > 23 || minute > 59) throw new RangeError("Invalid Curaçao date or time");
+  // Validate the calendar date before sending an ISO timestamp to the API.
+  addCalendarDays(date, 0);
+  return `${date}T${time}:00-04:00`;
 }
 
 export function daysBetween(start: string, end: string): number {
