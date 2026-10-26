@@ -31,8 +31,9 @@ export default function Home() {
   // Display currency the shopper last chose on the Cars page (USD by default).
   const dc: DisplayCurrency = (() => {
     try {
-      const v = localStorage.getItem("dc") as DisplayCurrency | null;
-      if (v && (DISPLAY_CURRENCIES as readonly string[]).includes(v)) return v;
+      const v = localStorage.getItem("dc");
+      if (v === "ANG") return "XCG";
+      if (v && (DISPLAY_CURRENCIES as readonly string[]).includes(v)) return v as DisplayCurrency;
     } catch { /* ignore */ }
     return "USD";
   })();
@@ -73,20 +74,20 @@ export default function Home() {
           <div className="search-card">
             <div className="search-grid">
               <div className="field">
-                <label><IconCalendar size={14} /> Pick-up date</label>
-                <input type="date" value={pickupDate} min={todayPlus(0)} onChange={(e) => setPickupDate(e.target.value)} />
+                <label htmlFor="home-pickup-date"><IconCalendar size={14} /> Pick-up date</label>
+                <input id="home-pickup-date" type="date" value={pickupDate} min={todayPlus(0)} onChange={(e) => setPickupDate(e.target.value)} />
               </div>
               <div className="field">
-                <label>Time</label>
-                <input type="time" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} />
+                <label htmlFor="home-pickup-time">Pick-up time (Curaçao local time)</label>
+                <input id="home-pickup-time" type="time" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} />
               </div>
               <div className="field">
-                <label><IconCalendar size={14} /> Return date</label>
-                <input type="date" value={returnDate} min={pickupDate} onChange={(e) => setReturnDate(e.target.value)} />
+                <label htmlFor="home-return-date"><IconCalendar size={14} /> Return date</label>
+                <input id="home-return-date" type="date" value={returnDate} min={pickupDate} onChange={(e) => setReturnDate(e.target.value)} />
               </div>
               <div className="field">
-                <label>Time</label>
-                <input type="time" value={returnTime} onChange={(e) => setReturnTime(e.target.value)} />
+                <label htmlFor="home-return-time">Return time (Curaçao local time)</label>
+                <input id="home-return-time" type="time" value={returnTime} onChange={(e) => setReturnTime(e.target.value)} />
               </div>
               <button className="btn btn-coral btn-lg" onClick={search} disabled={!datesValid}>
                 Search cars
@@ -156,6 +157,7 @@ export default function Home() {
               <span className="eyebrow">Popular cars</span>
               <h2>Choose your ride</h2>
               <p>From nippy economy runabouts to family SUVs — book a category, get that car or similar.</p>
+              <p className="currency-disclaimer">Converted prices are estimates; final payment is in the rental company’s currency at pickup.</p>
             </div>
             <div className="cats">
               {popular ? (
